@@ -1,6 +1,6 @@
 # Forum Sample Project
 
-A sample project to showcase Laravel, Livewire, AlpineJS, and MySQL.
+A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 
 ## TODO
 

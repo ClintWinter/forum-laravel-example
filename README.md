@@ -5,24 +5,24 @@ A sample project to showcase Laravel, Livewire, AlpineJS, and MySQL.
 ## TODO
 
 **Posts**
-[x] index
-[x] show
-[] add
-[] edit
-[] delete
-[] markdown formatting
-[] likable (toggle)
+- [x] index
+- [x] show
+- [ ] add
+- [ ] edit
+- [ ] delete
+- [ ] markdown formatting
+- [ ] likable (toggle)
 
 **Comments**
-[x] index
-[] add
-[] edit
-[] delete
-[] markdown formatting
-[] nested comments
-    [] collapsible threads (like reddit)
-[] likable (toggle)
+- [x] index
+- [ ] add
+- [ ] edit
+- [ ] delete
+- [ ] markdown formatting
+- [ ] nested comments
+    - [ ] collapsible threads (like reddit)
+- [ ] likable (toggle)
 
 **Users**
-[] show (w/ posts)
-[] auth
+- [ ] show (w/ posts)
+- [ ] auth

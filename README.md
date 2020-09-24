@@ -26,3 +26,4 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 **Users**
 - [ ] show (w/ posts)
 - [ ] auth
+- [ ] email notifications

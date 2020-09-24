@@ -1,10 +1,8 @@
-@extends('layout.master')
-@section('main')
+<x-master>
 
-
-    <div class="container mx-auto py-12 px-8">
+    <div class="container mx-auto py-12 px-4">
         <div>
-            <a class="text-blue-500 underline" href="/posts">View All</a>
+            <x-link class="text-blue-500" href="/posts">View All</x-link>
         </div>
 
         <div class="h-8"></div>
@@ -53,7 +51,7 @@
         <div class="h-16"></div>
 
         {{-- new comment --}}
-        <div class="border border-gray-300 rounded-sm p-4">
+        <div class="bg-gray-100 border border-gray-300 rounded-sm p-4">
             <textarea 
                 name="" 
                 id="" 
@@ -64,11 +62,9 @@
             <div class="h-8"></div>
             
             <div class="flex justify-end">
-                <button 
-                    class="bg-gray-800 hover:bg-gray-900 border border-gray-900 uppercase text-white uppercase font-bold px-4 py-1"
-                >Post comment</button>
+                <x-btn-primary>Post comment</x-btn-primary>
             </div>
         </div>
     </div>
 
-@endsection
+</x-master>

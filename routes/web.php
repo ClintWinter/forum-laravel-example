@@ -8,8 +8,6 @@ Route::get('/', function() {
 });
 
 Route::get('/posts', [PostController::class, 'index']);
-Route::get('/posts/{post}', [PostController::class, 'show']);
-
 Route::middleware('auth')->group(function() {
     Route::get('/posts/new', [PostController::class, 'create']);
     Route::post('/posts', [PostController::class, 'store']);
@@ -17,6 +15,7 @@ Route::middleware('auth')->group(function() {
     Route::post('/posts/{post}', [PostController::class, 'update']);
     Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 });
+Route::get('/posts/{post}', [PostController::class, 'show']);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

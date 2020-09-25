@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -14,9 +15,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('posts.index', [
-            'posts' => Post::where('parent_id', 0)->withCount('comments')->get()
-        ]);
+        $posts = Post::where('parent_id', 0)
+            ->withCount('comments')
+            ->orderByDesc('created_at')
+            ->get();
+        
+        return view('posts.index', ['posts' => $posts]);
     }
 
     /**
@@ -26,7 +30,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.new');
     }
 
     /**
@@ -37,7 +41,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|min:5',
+            'body' => 'required|min:10',
+        ]);
+
+        Auth::user()->posts()->create($validatedData);
+
+        return redirect('/posts');
     }
 
     /**

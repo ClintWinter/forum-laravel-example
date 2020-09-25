@@ -16,7 +16,7 @@
     <div class="bg-gray-200">
         <div class="container mx-auto flex justify-between items-center p-4">
             <div>
-                <h1 class="font-black text-lg text-indigo-600">ForumApp</h1>
+                <h1 class="font-black text-lg text-indigo-600"><a href="/posts">ForumApp</a></h1>
             </div>
 
             <div>

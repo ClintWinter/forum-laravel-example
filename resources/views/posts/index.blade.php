@@ -1,14 +1,12 @@
 <x-master>
-
-    <div class="container mx-auto p-4">
-
+    <x-container>
         <div class="h-8"></div>
 
         <div class="flex justify-between items-center">
             <h1 class="text-2xl uppercase tracking-widest text-gray-600 font-thin">Posts</h1>
             
             @auth
-                <x-btn-primary>New post</x-btn-primary>
+                <x-link-primary href="/posts/new">New post</x-link-primary>
             @endauth
         </div>
 
@@ -48,7 +46,5 @@
                 </div>
             @endforeach
         </div>
-
-    </div>
-    
+    </x-container>
 </x-master>

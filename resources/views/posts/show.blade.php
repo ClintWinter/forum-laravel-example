@@ -9,20 +9,56 @@
         
         {{-- post --}}
         <div>
-            <h1 class="text-3xl">{{$post->title}}</h1>
+            <div>
+                <h1 class="text-3xl">{{$post->title}}</h1>
+            </div>
 
             <div class="h-4"></div>
 
-            <p>{{$post->body}}</p>
+            <div>
+                <p class="whitespace-pre-wrap">{{$post->body}}</p>
+            </div>
 
             <div class="h-4"></div>
 
-            <p>
-                <small class="text-gray-700">
-                    <i class="fas fa-user"></i> {{$post->user->name}}
-                    • {{$post->created_at->format('n/j/Y g:i A')}}
-                </small>
-            </p>
+            <div class="flex justify-between">
+                <p>
+                    <small class="text-gray-700">
+                        <i class="fas fa-user"></i> {{$post->user->name}}
+                        • {{$post->created_at->format('n/j/Y g:i A')}}
+                    </small>
+                </p>
+
+                @can('update', $post)
+                    <div>
+                        <x-link href="/posts/{{$post->id}}/edit" class="mr-2">Edit</x-link>
+                        <x-modal class="inline-block">
+                            <x-slot name="trigger">
+                                <x-btn.link role="button" @click="open = !open">Delete</x-btn.link>
+                            </x-slot>
+
+                            <div class="p-2">
+                                <h2>Are you sure you want to delete this post?</h2>
+
+                                <div class="h-8"></div>
+                                
+                                <div class="flex justify-center items-center">
+                                    <x-btn.link class="mr-4" @click="open = false">No</x-btn.link>
+
+                                    <x-form-button action="/posts/{{$post->id}}" method="DELETE">
+                                        <x-btn.primary type="submit">Yes</x-btn.primary>
+                                    </x-form-button>
+                                </div>
+                            </div>
+                        </x-modal>
+                        {{-- <x-form-button 
+                            action="/posts/{{$post->id}}" 
+                            method="DELETE"
+                            class="underline"
+                        >Delete</x-form-button> --}}
+                    </div>
+                @endcan
+            </div>
         </div>
 
         @foreach ($post->comments()->orderBy('created_at')->get() as $comment)
@@ -62,7 +98,7 @@
             <div class="h-8"></div>
             
             <div class="flex justify-end">
-                <x-btn-primary>Post comment</x-btn-primary>
+                <x-btn.primary>Post comment</x-btn.primary>
             </div>
         </div>
     </div>

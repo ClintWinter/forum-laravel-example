@@ -3,7 +3,7 @@
         <div class="h-8"></div>
 
         <div class="flex justify-between items-center">
-            <h1 class="text-2xl uppercase tracking-widest text-gray-600 font-thin">Posts</h1>
+            <x-page-header>Posts</x-page-header>
             
             @auth
                 <x-link-primary href="/posts/new">New post</x-link-primary>

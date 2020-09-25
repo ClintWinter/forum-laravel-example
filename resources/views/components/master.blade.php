@@ -13,7 +13,7 @@
 </head>
 <body>
 
-    <div class="bg-gray-200">
+    <div class="border-b border-gray-300">
         <div class="container mx-auto flex justify-between items-center p-4">
             <div>
                 <h1 class="font-black text-lg text-indigo-600"><a href="/posts">ForumApp</a></h1>
@@ -23,7 +23,7 @@
                 @auth
                     <form action="/logout" method="post">
                         @csrf
-                        <x-btn-secondary type="submit">Log out</x-btn-secondary>
+                        <x-btn.secondary type="submit">Log out</x-btn.secondary>
                     </form>
                 @else
                     <x-link-secondary type="link" href="/login">Log in</x-link-secondary>

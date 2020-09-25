@@ -4,7 +4,7 @@
 ])
 
 <a 
-    {{ $attributes->merge(['class' => 'underline']) }}
+    {{ $attributes->merge(['class' => 'hover:underline']) }}
 
     @if($href)
         href="{{ $href }}"

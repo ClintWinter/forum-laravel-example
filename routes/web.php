@@ -12,7 +12,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/posts/new', [PostController::class, 'create']);
     Route::post('/posts', [PostController::class, 'store']);
     Route::get('/posts/{post}/edit', [PostController::class, 'edit']);
-    Route::post('/posts/{post}', [PostController::class, 'update']);
+    Route::patch('/posts/{post}', [PostController::class, 'update']);
     Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 });
 Route::get('/posts/{post}', [PostController::class, 'show']);

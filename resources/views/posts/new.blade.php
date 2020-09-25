@@ -1,27 +1,19 @@
 <x-master>
 <x-container>
 
-<h1 class="text-3xl font-thin uppercase text-gray-600">New post</h1>
+<div class="h-8"></div>
+
+<x-page-header>New post</x-page-header>
 
 <hr class="my-8">
 
-@if($errors->any())
-    <div>
-        <ul class="border border-red-500 bg-red-200 rounded p-4 pl-8 list-disc">
-            @foreach($errors->all() as $error)
-                <li class="text-red-800 mb-1">{{$error}}</li>
-            @endforeach
-        </ul>
-    </div>
-
-    <div class="h-8"></div>
-@endif
+<x-form-errors />
 
 <form action="/posts" method="POST">
     @csrf
 
     <div>
-        <label>Title</label>
+        <label class="font-bold text-sm">Title</label>
 
         <div class="h-2"></div>
         
@@ -38,7 +30,7 @@
     <div class="h-8"></div>
 
     <div>
-        <label>Body</label>
+        <label class="font-bold text-sm">Body</label>
 
         <div class="h-2"></div>
         
@@ -53,7 +45,7 @@
     <div class="h-8"></div>
 
     <div>
-        <x-btn-primary type="submit">Create post</x-btn-primary>
+        <x-btn.primary type="submit">Create post</x-btn.primary>
     </div>
 </form>
 

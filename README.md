@@ -24,6 +24,7 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 - [ ] collapsible threads (like reddit)
 - [ ] likable (toggle)
 - [x] authentication for actions
+- [ ] livewire for dynamic edits
 
 **Users**
 - [ ] show

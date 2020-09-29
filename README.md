@@ -7,8 +7,8 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 **Posts**
 - [x] index
 - [x] show
-- [ ] add
-- [ ] edit
+- [x] add
+- [x] edit
 - [ ] delete
 - [ ] markdown formatting
 - [ ] likable (toggle)

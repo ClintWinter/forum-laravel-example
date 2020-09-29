@@ -34,3 +34,4 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
     - [ ] like score
 - [x] auth
 - [ ] email notifications
+- [ ] throttle # of posts/comments per hour

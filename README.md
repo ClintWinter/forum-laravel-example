@@ -12,18 +12,23 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 - [x] delete
 - [ ] markdown formatting
 - [ ] likable (toggle)
+- [x] authentication for actions
 
 **Comments**
 - [x] index
-- [ ] add
+- [x] add
 - [ ] edit
-- [ ] delete
+- [x] delete
 - [ ] markdown formatting
-- [ ] nested comments
-    - [ ] collapsible threads (like reddit)
+- [x] nested comments
+- [ ] collapsible threads (like reddit)
 - [ ] likable (toggle)
+- [x] authentication for actions
 
 **Users**
-- [ ] show (w/ posts)
+- [ ] show
+    - [ ] posts
+    - [ ] comments
+    - [ ] like score
 - [x] auth
 - [ ] email notifications

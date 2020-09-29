@@ -20,12 +20,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::where('parent_id', 0)
-            ->withCount('comments')
+        $posts = Post::withCount('comments')
             ->orderByDesc('created_at')
             ->get();
         
-        return view('posts.index', ['posts' => $posts]);
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -53,7 +52,7 @@ class PostController extends Controller
 
         Auth::user()->posts()->create($validatedData);
 
-        return redirect('/posts');
+        return back();
     }
 
     /**
@@ -64,7 +63,14 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('posts.show', ['post' => $post]);
+        $comments = $post->comments()
+            ->with('user')
+            ->orderBy('created_at')
+            ->withTrashed()
+            ->get()
+            ->groupBy('parent_id');
+        
+        return view('posts.show', compact('post', 'comments'));
     }
 
     /**
@@ -75,7 +81,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.edit', ['post' => $post]);
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -95,7 +101,7 @@ class PostController extends Controller
 
         $post->save();
 
-        return redirect('/posts/' . $post->id);
+        return back();
     }
 
     /**
@@ -108,6 +114,6 @@ class PostController extends Controller
     {
         $post->delete();
 
-        return redirect('/posts');
+        return back();
     }
 }

@@ -4,18 +4,20 @@
         {{-- post + comments + new comment --}}
         <div class="w-full lg:w-1/2 mx-auto">
             {{-- post --}}
-            <div>
-                <div>
-                    <h1 class="text-3xl">{{$post->title}}</h1>
+            <div class="border border-gray-300 rounded px-4 py-2">
+                <div class="py-4">
+                    <h1 class="text-xl font-bold leading-tight">{{$post->title}}</h1>
                 </div>
 
-                <div class="h-4"></div>
+                <hr>
+
+                <div class="h-8"></div>
 
                 <div>
                     <p class="whitespace-pre-wrap">{{$post->body}}</p>
                 </div>
 
-                <div class="h-4"></div>
+                <div class="h-12"></div>
 
                 <div class="flex justify-between">
                     <p>
@@ -27,10 +29,18 @@
 
                     @can('update', $post)
                         <div>
-                            <x-link href="/posts/{{$post->id}}/edit" class="mr-2">Edit</x-link>
+                            <x-link 
+                                href="/posts/{{$post->id}}/edit" 
+                                class="mr-2 text-xs text-gray-700"
+                            >Edit</x-link>
+
                             <x-modal class="inline-block">
                                 <x-slot name="trigger">
-                                    <x-btn.link role="button" @click="open = !open">Delete</x-btn.link>
+                                    <x-btn.link 
+                                        class="text-xs text-gray-700"
+                                        role="button" 
+                                        @click="open = !open"
+                                    >Delete</x-btn.link>
                                 </x-slot>
 
                                 <div class="p-2">

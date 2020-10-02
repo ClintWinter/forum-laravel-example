@@ -50,9 +50,9 @@ class PostController extends Controller
             'body' => 'required|min:10',
         ]);
 
-        Auth::user()->posts()->create($validatedData);
+        $post = Auth::user()->posts()->create($validatedData);
 
-        return back();
+        return redirect('/posts/' . $post->id);
     }
 
     /**
@@ -101,7 +101,7 @@ class PostController extends Controller
 
         $post->save();
 
-        return back();
+        return redirect('/posts/' . $post->id);
     }
 
     /**

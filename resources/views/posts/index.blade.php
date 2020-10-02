@@ -12,35 +12,34 @@
 
         <div class="h-8"></div>
 
-        <div class="flex justify-around flex-wrap items-stretch">
+        <div class="flex justify-around flex-wrap items-stretch border border-gray-300">
+            <div class="h-4"></div>
+            
             @foreach ($posts as $post)
-                <div class="w-full p-4 mb-4 border border-gray-300 rounded">
-                    <h2 class="font-bold leading-none">
-                        <x-link href="/posts/{{$post->id}}">{{ $post->title }}</x-link>
-                    </h2>
+                <div class="w-full mx-4 mb-4 pb-4 flex items-center justify-between border-b border-gray-100">
+                    <div class="flex-grow">
+                        <h2 class="font-bold leading-none" title="{{ $post->ellipsedBody() }}">
+                            <x-link href="/posts/{{ $post->id }}">{{ $post->title }}</x-link>
+                        </h2>
 
-                    <div class="h-4"></div>
-                    
-                    <p>{{ strlen($post->body) > 100 ? substr($post->body, 0, 100) . '...' : $post->body }}</p>
+                        <div class="flex justify-between items-end">
+                            <p>
+                                <small class="text-xs text-gray-600">
+                                    <i class="fas fa-user"></i> 
+                                    <a 
+                                        class="underline" 
+                                        href="/users/{{$post->user->id}}"
+                                    >{{ $post->user->name }}</a>
+                                    • {{ $post->created_at->diffForHumans() }} 
+                                </small>
+                            </p>
+                        </div>
+                    </div>
 
-                    <div class="h-4"></div>
-
-                    <div class="flex justify-between items-end">
-                        <p>
-                            <small class="text-xs text-gray-600">
-                                <i class="fas fa-user"></i> 
-                                <a 
-                                    class="underline" 
-                                    href="/users/{{$post->user->id}}"
-                                >{{ $post->user->name }}</a>
-                                • {{ $post->created_at->format('n/j/Y g:i A') }} 
-                            </small>
-                        </p>
-
-                        <p class="text-lg text-gray-600">
+                    <div class="right-side">
+                        <p class="text-sm text-gray-600">
                             {{$post->comments_count}} 
-                            <span class="pl-2"></span>
-                            <i class="fas fa-comments"></i>
+                            <i class="fas fa-comments text-gray-400"></i>
                         </p>
                     </div>
                 </div>

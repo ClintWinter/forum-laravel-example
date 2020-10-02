@@ -18,6 +18,8 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->longText('body');
             $table->foreignId('user_id')->constrained();
+            $table->bigInteger('upvotes')->default(0);
+            $table->bigInteger('downvotes')->default(0);
             $table->timestamps();
         });
     }

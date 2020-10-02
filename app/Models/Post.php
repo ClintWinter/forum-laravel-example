@@ -24,4 +24,14 @@ class Post extends Model
     {
         return $this->hasMany('App\Models\Comment');
     }
+
+    public function score()
+    {
+        return $this->upvotes - $this->downvotes;
+    }
+
+    public function ellipsedBody($length = 100)
+    {
+        return strlen($this->body) > $length ? substr($this->body, 0, $length) . '...' : $this->body;
+    }
 }

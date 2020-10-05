@@ -6,7 +6,7 @@
             {{-- post --}}
             <div class="border border-gray-300 rounded px-4 py-2">
                 <div class="py-4">
-                    <h1 class="text-xl font-bold leading-tight">{{$post->title}}</h1>
+                    <h1 class="text-xl font-bold leading-tight">{{ $post->title }}</h1>
                 </div>
 
                 <hr>
@@ -14,23 +14,22 @@
                 <div class="h-8"></div>
 
                 <div>
-                    <p class="whitespace-pre-wrap">{{$post->body}}</p>
+                    <p class="whitespace-pre-wrap">{{ $post->body }}</p>
                 </div>
 
                 <div class="h-12"></div>
 
                 <div class="flex justify-between">
-                    <p>
-                        <small class="text-gray-700">
-                            <i class="fas fa-user"></i> {{$post->user->name}}
-                            • {{$post->created_at->format('n/j/Y g:i A')}}
-                        </small>
+                    <p class="text-gray-700 text-xs flex items-center space-x-2">
+                        <i class="fas fa-user text-lg"></i> 
+                        <span class="font-bold text-gray-900 text-sm mr-1">{{ $post->user->name }}</span>
+                        <span>{{ $post->created_at->diffForHumans() }}</span>
                     </p>
 
                     @can('update', $post)
                         <div>
                             <x-link 
-                                href="/posts/{{$post->id}}/edit" 
+                                href="/posts/{{ $post->id }}/edit" 
                                 class="mr-2 text-xs text-gray-700"
                             >Edit</x-link>
 
@@ -51,7 +50,7 @@
                                     <div class="flex justify-center items-center">
                                         <x-btn.link class="mr-4" @click="open = false">No</x-btn.link>
 
-                                        <x-form-button action="/posts/{{$post->id}}" method="DELETE">
+                                        <x-form-button action="/posts/{{ $post->id}}" method="DELETE">
                                             <x-btn.primary type="submit">Yes</x-btn.primary>
                                         </x-form-button>
                                     </div>
@@ -85,12 +84,12 @@
                     @if($errors->any())
                         <div class="border border-red-600 rounded-sm bg-red-300 text-red-900 p-4 pb-2 mb-4">
                             @foreach ($errors->all() as $error)
-                                <p class="mb-2">{{$error}}</p>
+                                <p class="mb-2">{{ $error }}</p>
                             @endforeach
                         </div>
                     @endif
                     
-                    <form action="/posts/{{$post->id}}/comments" method="POST">
+                    <form action="/posts/{{ $post->id }}/comments" method="POST">
                         @csrf
 
                         <textarea 

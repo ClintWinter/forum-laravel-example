@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Reactability;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Reactability;
 
     protected $fillable = ['body', 'parent_id'];
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ReactablePostController;
 
 Route::get('/', function() {
     return redirect('/posts');
@@ -18,6 +19,9 @@ Route::middleware('auth')->group(function() {
     
     Route::post('/posts/{post}/comments', [CommentController::class, 'store']);
     Route::delete('/posts/{post}/comments/{comment}', [CommentController::class, 'destroy']);
+
+    Route::post('/reactable-posts/{$post}', [ReactablePostController::class, 'store']);
+    Route::post('/reactable-comments/{$comment}', [ReactableCommentController::class, 'store']);
 });
 Route::get('/posts/{post}', [PostController::class, 'show']);
 

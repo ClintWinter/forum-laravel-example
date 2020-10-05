@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <link rel="icon" href="data:,">
+
     <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="/css/all.min.css">
-    @livewireStyles
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <livewire:styles>
     
     <title>Forum App</title>
 </head>
@@ -34,8 +36,8 @@
 
     {{ $slot }}
 
-    @livewireScripts
     <script src="/js/app.js"></script>
+    <livewire:scripts>
     <script src="/js/all.min.js"></script>
 </body>
 </html>

@@ -3,11 +3,10 @@
     x-data="{ replying: false, collapsed: false, confirmDelete: false }"
 >
     {{-- headline --}}
-    <div class="flex justify-between text-gray-500 text-xs">
-        <p>
-            <i class="fas fa-user"></i>
-            <span>{{$comment->user->name}}</span>
-            •
+    <div class="flex justify-between text-xs">
+        <p class="text-gray-700 flex items-center space-x-2">
+            <i class="fas fa-user text-lg"></i>
+            <span class="font-bold text-gray-900 text-sm mr-1">{{$comment->user->name}}</span>
             <span>{{$comment->created_at->diffForHumans()}}</span>
         </p>
 
@@ -21,12 +20,7 @@
 
     {{-- score + body --}}
     <div class="flex" x-show="! collapsed">
-        {{-- post score --}}
-        <div class="w-10 flex flex-col items-center">
-            <x-btn.link class="link"><i class="fas fa-chevron-up"></i></x-btn.link>
-            {{ $post->score() }}
-            <x-btn.link class="link"><i class="fas fa-chevron-down"></i></x-btn.link>
-        </div>
+        <livewire:comment-reaction :comment="$comment">
 
         {{-- post body --}}
         <div class="flex-grow">

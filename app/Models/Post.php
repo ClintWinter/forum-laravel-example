@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Reactability;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, Reactability;
 
     protected $fillable = ['title', 'body', 'user_id'];
 
@@ -23,11 +24,6 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany('App\Models\Comment');
-    }
-
-    public function score()
-    {
-        return $this->upvotes - $this->downvotes;
     }
 
     public function ellipsedBody($length = 100)

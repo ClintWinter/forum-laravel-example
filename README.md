@@ -22,8 +22,8 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
     - [x] soft deletes to preserve comment structure
 - [ ] markdown formatting
 - [x] nested comments
-- [ ] collapsible threads (like reddit)
-- [ ] likable (toggle)
+- [x] collapsible threads (like reddit)
+- [x] likable (toggle)
 - [x] authentication for actions
 - [ ] livewire for dynamic edits
 

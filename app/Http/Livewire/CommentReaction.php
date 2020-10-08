@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentReaction extends Component
 {
-    public Comment $comment;
+    public $comment;
     
     public function upvote()
     {

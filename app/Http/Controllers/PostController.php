@@ -68,7 +68,8 @@ class PostController extends Controller
             ->orderBy('created_at')
             ->withTrashed()
             ->get()
-            ->groupBy('parent_id');
+            ->groupBy('parent_id')
+            ->all();
         
         return view('posts.show', compact('post', 'comments'));
     }

@@ -59,6 +59,11 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment');
+    }
+
     public function posts()
     {
         return $this->hasMany('App\Models\Post');

@@ -15,11 +15,21 @@ class Show extends Component
 
     public $body;
 
-    protected $rules =[
+    protected $rules = [
         'body' => 'required|min:10',
     ];
 
     protected $listeners = ['addComment' => 'addComment'];
+
+    public function mount()
+    {
+        $this->comments = $this->post->comments()
+            ->where('parent_id', 0)
+            ->with('user')
+            ->orderBy('created_at')
+            ->withTrashed()
+            ->get();
+    }
 
     public function addComment()
     {
@@ -34,16 +44,15 @@ class Show extends Component
         $this->post->refresh();
 
         $this->comments = $this->post->comments()
+            ->where('parent_id', 0)
             ->with('user')
             ->orderBy('created_at')
             ->withTrashed()
-            ->get()
-            ->groupBy('parent_id')
-            ->all();
+            ->get();
 
         $this->reset(['body']);
     }
-    
+
     public function render()
     {
         return view('livewire.post.show');

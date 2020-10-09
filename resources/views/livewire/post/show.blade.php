@@ -7,15 +7,9 @@
                 <h1 class="text-xl font-bold leading-tight">{{ $post->title }}</h1>
             </div>
 
-            <hr>
+            <hr class="mb-8">
 
-            <div class="h-8"></div>
-
-            <div>
-                <p class="whitespace-pre-wrap">{{ $post->body }}</p>
-            </div>
-
-            <div class="h-12"></div>
+            <p class="whitespace-pre-wrap mb-12">{{ $post->body }}</p>
 
             <div class="flex justify-between">
                 <p class="text-gray-700 text-xs flex items-center space-x-2">
@@ -61,7 +55,7 @@
 
         <div class="h-4"></div>
 
-        <x-comment.list :post="$post" :comments="$comments" :comment-id="0" />
+        <x-comment.list :comments="$comments"/>
 
         <div class="h-16"></div>
 

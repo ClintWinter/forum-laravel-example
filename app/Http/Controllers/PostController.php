@@ -23,7 +23,7 @@ class PostController extends Controller
         $posts = Post::withCount('comments')
             ->orderByDesc('created_at')
             ->get();
-        
+
         return view('posts.index', compact('posts'));
     }
 
@@ -63,15 +63,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $comments = $post->comments()
-            ->with('user')
-            ->orderBy('created_at')
-            ->withTrashed()
-            ->get()
-            ->groupBy('parent_id')
-            ->all();
-        
-        return view('posts.show', compact('post', 'comments'));
+        return view('posts.show', compact('post'));
     }
 
     /**

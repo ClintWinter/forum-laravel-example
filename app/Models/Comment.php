@@ -25,13 +25,18 @@ class Comment extends Model
         // });
     }
 
+    public function post()
+    {
+        return $this->belongsTo('App\Models\Post');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany('App\Models\Comment', 'parent_id');
+    }
+
     public function user()
     {
         return $this->belongsTo('App\Models\User');
-    }
-
-    public function comments()
-    {
-        return $this->hasMany('App\Models\Comment', 'parent_id');
     }
 }

@@ -1,5 +1,5 @@
 <x-master>
 
-    <livewire:post.show :post="$post" :comments="$comments" />
+    <livewire:post.show :post="$post" />
 
 </x-master>

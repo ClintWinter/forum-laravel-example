@@ -9,43 +9,49 @@ use Livewire\Component;
 class Show extends Component
 {
     public $post;
-    public $comments;
+    public $replies;
     public $comment;
 
-    public $body;
-    public $parent_id;
+    public $reply;
 
     protected $rules = [
-        'body' => 'required|min:5',
-        'parent_id' => 'required',
+        'comment.body' => '',
+        'reply' => 'required|min:5',
     ];
 
-    public function mount()
+    public function mount($comment)
     {
-        $this->parent_id = $this->comment->id;
+        $this->comment = $comment;
+        $this->post = $this->comment->post;
+        $this->replies = $this->comment->replies()
+            ->with('user')
+            ->orderBy('created_at')
+            ->withTrashed()
+            ->get();
     }
 
     public function addComment()
     {
-        $validData = $this->validate();
+        $this->post->comments()->save(
+            auth()->user()->comments()->make(
+                $this->comment->replies()->make([
+                    'body' => $this->validate()['reply']
+                ])->attributesToArray()
+            )
+        );
 
-        $comment = new Comment($validData);
-
-        $comment->user_id = Auth::user()->id;
-
-        $this->post->comments()->save($comment);
-
-        $this->post->refresh();
-
-        $this->comments = $this->post->comments()
+        $this->replies = $this->comment->replies()
             ->with('user')
             ->orderBy('created_at')
             ->withTrashed()
-            ->get()
-            ->groupBy('parent_id')
-            ->all();
+            ->get();
 
-        $this->reset(['body']);
+        $this->reset(['reply']);
+    }
+
+    public function editComment()
+    {
+        $this->comment->save();
     }
 
     public function render()

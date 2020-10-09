@@ -1,6 +1,6 @@
-<div 
-    class="border border-gray-300 p-1 mt-2 border-l-4 rounded-sm {{$comment->trashed() ? 'bg-gray-100' : 'bg-white'}}" 
-    x-data="{ replying: false, collapsed: false, confirmDelete: false }"
+<div
+    class="border border-gray-300 p-1 mt-2 border-l-4 rounded-sm {{$comment->trashed() ? 'bg-gray-100' : 'bg-white'}}"
+    x-data="{ collapsed: false, confirmDelete: false, editing: false }"
 >
     {{-- headline --}}
     <div class="flex justify-between text-xs">
@@ -24,14 +24,28 @@
 
         {{-- post body --}}
         <div class="flex-grow">
-            <div>
+            <div x-show="! editing">
                 <div class="h-4"></div>
-                
+
                 @if($comment->trashed())
                     <p>[Deleted]</p>
                 @else
                     <p>{{$comment->body}}</p>
                 @endif
+            </div>
+            <div x-show="editing">
+                <textarea
+                    name="editBody"
+                    placeholder="Comment..."
+                    wire:model="comment.body"
+                    class="resize-y border border-gray-300 w-full h-32 p-2 mb-8 max-h-64"
+                ></textarea>
+
+                <div class="flex justify-end">
+                    <x-btn.link class="mr-4" @click="editing = false" wire:click="$refresh()">Cancel</x-btn.link>
+
+                    <x-btn.primary @click="editing = false" wire:click="editComment()">Save comment</x-btn.primary>
+                </div>
             </div>
         </div>
     </div>
@@ -42,12 +56,14 @@
             <div class="h-4"></div>
 
             <div class="flex space-x-2 text-xs text-gray-500">
+                <x-btn.link class="underline" @click="editing = true">Edit</x-btn.link>
+
                 {{-- reply --}}
                 @auth
                     <x-modal>
                         <x-slot name="trigger">
-                            <x-btn.link 
-                                class="underline" 
+                            <x-btn.link
+                                class="underline"
                                 @click="open = true"
                             >Reply</x-btn.link>
                         </x-slot>
@@ -56,31 +72,29 @@
                         <div>
                             <h1 class="text-xl mb-4">Replying to <b>{{ $comment->user->name }}</b></h1>
 
-                            <div 
+                            <div
                                 class="text-base border-l-4 border-yellow-300 px-4 py-2 mb-4"
                             >{{ $comment->body }}</div>
 
                             <form wire:submit.prevent="addComment">
-                                <textarea 
-                                    name="body" 
+                                <textarea
+                                    name="reply"
                                     placeholder="Comment..."
-                                    wire:model.defer="body"
+                                    wire:model.defer="reply"
                                     class="resize-y border border-gray-300 w-full h-32 p-2 max-h-64"
                                 ></textarea>
 
-                                <input type="hidden" name="parent_id" wire:model.defer="parent_id" value="">
-                                
                                 <div class="h-8"></div>
-                                
+
                                 <div class="flex justify-end">
-                                    <x-btn.link 
-                                        class="mr-4" 
-                                        type="button" 
+                                    <x-btn.link
+                                        class="mr-4"
+                                        type="button"
                                         @click="open = false"
                                     >Cancel</x-btn.link>
-                                    
-                                    <x-btn.primary 
-                                        type="submit" 
+
+                                    <x-btn.primary
+                                        type="submit"
                                         @click="open = false"
                                     >Post comment</x-btn.primary>
                                 </div>
@@ -92,16 +106,16 @@
                 {{-- delete --}}
                 @can('delete', $comment)
                     <div>
-                        <x-btn.link 
-                            class="underline" 
-                            @click="confirmDelete = true" 
+                        <x-btn.link
+                            class="underline"
+                            @click="confirmDelete = true"
                             x-show="!confirmDelete"
                         >Delete</x-btn.link>
 
                         <div x-show="confirmDelete" x-cloak>
-                            Are you sure? 
-                            <x-form-button 
-                                class="underline" 
+                            Are you sure?
+                            <x-form-button
+                                class="underline"
                                 action="/posts/{{$post->id}}/comments/{{$comment->id}}"
                                 method="DELETE"
                             ><x-btn.link class="underline">Yes</x-btn.link></x-form-button>
@@ -112,9 +126,9 @@
             </div>
         </div>
     @endif
-    
+
     {{-- nested comment list --}}
     <div x-show="! collapsed">
-        <x-comment.list class="mt-4" :post="$post" :comments="$comments" :comment-id="$comment->id" />
+        <x-comment.list class="mt-4" :comments="$replies" />
     </div>
 </div>

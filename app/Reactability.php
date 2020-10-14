@@ -7,6 +7,30 @@ use App\Models\User;
 
 trait Reactability {
 
+    public function upvote()
+    {
+        if ($this->hasReactionFrom(auth()->user(), 1)) {
+            $this->unreact(auth()->user());
+            return;
+        }
+
+        $this->unreact(auth()->User());
+        $this->react(auth()->user(), 1);
+        return;
+    }
+
+    public function downvote()
+    {
+        if ($this->hasReactionFrom(auth()->user(), -1)) {
+            $this->unreact(auth()->User());
+            return;
+        }
+
+        $this->unreact(auth()->user());
+        $this->react(auth()->user(), -1);
+        return;
+    }
+
     public function reactions()
     {
         return $this->morphMany('App\Models\Reaction', 'reactable');
@@ -26,27 +50,15 @@ trait Reactability {
 
     public function react(User $user, $value)
     {
-        $reaction = new Reaction([
+        $this->reactions()->create([
             'user_id' => $user->id,
             'value' => $value,
         ]);
-
-        $this->reactions()->save($reaction);
     }
 
     public function unreact(User $user)
     {
         $this->reactions()->where('user_id', $user->id)->delete();
-    }
-
-    public function hasReactionFrom(User $user, $value = null)
-    {
-        $where = ['user_id' => $user->id];
-        
-        if ($value)
-            $where['value'] = $value;
-
-        return !! $this->reactions()->where($where)->count();
     }
 
     public function toggleReaction(User $user, $value)
@@ -56,5 +68,15 @@ trait Reactability {
 
         return $this->react($user, $value);
     }
-    
+
+    public function hasReactionFrom(User $user, $value = null)
+    {
+        $where = ['user_id' => $user->id];
+
+        if ($value)
+            $where['value'] = $value;
+
+        return !! $this->reactions()->where($where)->count();
+    }
+
 }

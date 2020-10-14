@@ -10,25 +10,20 @@
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <livewire:styles>
-    
+
     <title>Forum App</title>
 </head>
 <body>
-
     <div class="border-b border-gray-300">
         <div class="container mx-auto flex justify-between items-center p-4">
-            <div>
-                <h1 class="font-black text-lg text-indigo-600"><a href="/posts">ForumApp</a></h1>
-            </div>
+            <h1 class="font-black text-lg text-indigo-600"><a href="/posts">ForumApp</a></h1>
 
-            <div>
+            <div class="space-x-4">
                 @auth
-                    <form action="/logout" method="post">
-                        @csrf
-                        <x-btn.secondary type="submit">Log out</x-btn.secondary>
-                    </form>
+                    <x-form-button action="/logout" method="POST"><x-btn.secondary type="submit">Log out</x-btn.secondary></x-form-button>
                 @else
-                    <x-link-secondary type="link" href="/login">Log in</x-link-secondary>
+                    <x-link type="link" href="/login">Log in</x-link>
+                    <x-link-primary type="link" href="/register">Register</x-link-primary>
                 @endauth
             </div>
         </div>

@@ -2,10 +2,6 @@
 
 namespace App\Http\Livewire\Post;
 
-use App\Models\Comment;
-use App\Models\Post;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 
 class Show extends Component
@@ -33,15 +29,9 @@ class Show extends Component
 
     public function addComment()
     {
-        $validData = $this->validate();
-
-        $comment = new Comment($validData);
-
-        $comment->user_id = Auth::user()->id;
-
-        $this->post->comments()->save($comment);
-
-        $this->post->refresh();
+        $this->post->comments()->save(
+            auth()->user()->comments()->make($this->validate())
+        );
 
         $this->comments = $this->post->comments()
             ->where('parent_id', 0)

@@ -2,8 +2,6 @@
 
 namespace App\Http\Livewire\Comment;
 
-use App\Models\Comment;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Show extends Component
@@ -52,6 +50,23 @@ class Show extends Component
     public function editComment()
     {
         $this->comment->save();
+    }
+
+    public function deleteComment()
+    {
+        $this->comment->delete();
+    }
+
+    public function upvote()
+    {
+        $this->comment->upvote();
+        $this->comment->refresh();
+    }
+
+    public function downvote()
+    {
+        $this->comment->downvote();
+        $this->comment->refresh();
     }
 
     public function render()

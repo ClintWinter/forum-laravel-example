@@ -1,13 +1,9 @@
 <div class="container mx-auto py-12 px-4">
     {{-- post + comments + new comment --}}
-    <div class="w-full lg:w-1/2 mx-auto">
+    <div class="w-full xl:w-2/3 mx-auto">
         {{-- post --}}
-        <div class="border border-gray-300 rounded px-4 py-2 mb-4">
-            <div class="py-4">
-                <h1 class="text-xl font-bold leading-tight">{{ $post->title }}</h1>
-            </div>
-
-            <hr class="mb-8">
+        <div class="px-4 py-2 mb-4">
+            <h1 class="text-xl font-bold leading-tight py-4 mb-8">{{ $post->title }}</h1>
 
             <p class="whitespace-pre-wrap mb-12">{{ $post->body }}</p>
 
@@ -43,7 +39,9 @@
             </div>
         </div>
 
-        <x-comment.list :comments="$comments"/>
+        <hr class="mt-8 mb-16">
+
+        <x-comment.list :comments="$comments" />
 
         {{-- new comment --}}
         @auth
@@ -65,7 +63,7 @@
                 </div>
             </div>
         @else
-            <div class="bg-gray-100 border border-gray-300 rounded-sm p-4 py-8">
+            <div class="bg-gray-100 border border-gray-300 rounded-sm p-4 py-8 mt-16">
                 <p class="text-center mb-2 text-lg">Want to be part of the conversation?</p>
                 <p class="text-center"><x-link class="text-blue-500" href="/login">Log in</x-link> or <x-link class="text-blue-500" href="/register">Sign up!</x-link></p>
             </div>

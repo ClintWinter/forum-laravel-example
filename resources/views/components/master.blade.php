@@ -14,7 +14,7 @@
     <title>Forum App</title>
 </head>
 <body>
-    <div class="border-b border-gray-300">
+    <div class="shadow">
         <div class="container mx-auto flex justify-between items-center p-4">
             <h1 class="font-black text-lg text-indigo-600"><a href="/posts">ForumApp</a></h1>
 

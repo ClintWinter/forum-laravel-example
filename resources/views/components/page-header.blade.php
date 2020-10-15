@@ -1,1 +1,1 @@
-<h1 class="text-2xl uppercase tracking-widest text-gray-600 font-thin">{{$slot}}</h1>
+<h1 class="text-lg uppercase tracking-widest text-gray-500">{{$slot}}</h1>

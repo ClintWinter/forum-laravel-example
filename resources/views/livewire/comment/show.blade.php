@@ -1,19 +1,18 @@
 <div
-    class="border border-gray-300 p-1 mt-2 border-l-4 rounded-sm {{$comment->trashed() ? 'bg-gray-100' : 'bg-white'}}"
+    class="p-1 mt-2 {{$comment->trashed() ? 'bg-gray-100' : 'bg-white'}}"
     x-data="{ collapsed: false, confirmDelete: false, editing: false }"
 >
     {{-- headline --}}
-    <div class="flex justify-between text-xs">
+    <div class="flex items-center text-xs">
+        <div class="mr-4">
+            <x-btn.link @click="collapsed = true" x-show="! collapsed">[-]</x-btn.link>
+            <x-btn.link @click="collapsed = false" x-show="collapsed">[+]</x-btn.link>
+        </div>
         <p class="text-gray-700 flex items-center space-x-2">
             <i class="fas fa-user text-lg"></i>
             <span class="font-bold text-gray-900 text-sm mr-1">{{$comment->user->name}}</span>
             <span>{{$comment->created_at->diffForHumans()}}</span>
         </p>
-
-        <div>
-            <x-btn.link @click="collapsed = true" x-show="! collapsed">[-]</x-btn.link>
-            <x-btn.link @click="collapsed = false" x-show="collapsed">[+]</x-btn.link>
-        </div>
     </div>
 
     {{-- score + body --}}
@@ -108,5 +107,7 @@
     @endif
 
     {{-- nested comment list --}}
-    <x-comment.list x-show="! collapsed" class="mt-4" :comments="$replies" />
+    @if($replies->count())
+        <x-comment.list x-show="! collapsed" class="mt-4 border-l border-gray-400 p-2" :comments="$replies" />
+    @endif
 </div>

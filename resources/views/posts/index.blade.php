@@ -14,9 +14,9 @@
             <div class="h-4"></div>
 
             @foreach ($posts as $post)
-                <div class="w-full mx-4 mb-4 pb-4 flex items-center justify-between border-b border-gray-100">
+                <div class="w-full mx-4 mb-4 pb-4 flex items-center justify-between border-b border-gray-100 last:border-b-0">
                     <div class="flex-grow">
-                        <h2 class="font-bold leading-none" title="{{ $post->ellipsedBody() }}">
+                        <h2 class="font-bold leading-none" title="{{ \Str::limit($post->body, 100) }}">
                             <x-link href="/posts/{{ $post->id }}">{{ $post->title }}</x-link>
                         </h2>
 
@@ -34,11 +34,12 @@
                         </div>
                     </div>
 
-                    <div class="right-side">
-                        <p class="text-sm text-gray-600">
-                            {{$post->comments_count}}
-                            <i class="fas fa-comments text-gray-400"></i>
-                        </p>
+                    <div class="right-side flex items-center space-x-2">
+                        @if($post->isHot())
+                            <i title="This post is trending." class="fas fa-fire text-orange-400"></i>
+                        @endif
+
+                        <p class="text-sm text-gray-600">{{$post->comments_count}} <i class="fas fa-comments text-gray-400"></i></p>
                     </div>
                 </div>
             @endforeach

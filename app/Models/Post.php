@@ -26,8 +26,8 @@ class Post extends Model
         return $this->hasMany('App\Models\Comment');
     }
 
-    public function ellipsedBody($length = 100)
+    public function isHot() : bool
     {
-        return strlen($this->body) > $length ? substr($this->body, 0, $length) . '...' : $this->body;
+        return $this->comments()->where('created_at', '>', now()->subDay())->count() > 10;
     }
 }

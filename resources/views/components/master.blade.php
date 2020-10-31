@@ -18,9 +18,11 @@
         <div class="container mx-auto flex justify-between items-center p-4">
             <h1 class="font-black text-lg text-indigo-600"><a href="/posts">ForumApp</a></h1>
 
-            <div class="space-x-4">
+            <div class="flex items-center space-x-4">
                 @auth
-                    <x-form-button action="/logout" method="POST"><x-btn.secondary type="submit">Log out</x-btn.secondary></x-form-button>
+                    <livewire:notifications />
+
+                    <x-form-button action="/logout" method="POST"><x-btn.secondary type="submit">{{ auth()->user()->name }}</x-btn.secondary></x-form-button>
                 @else
                     <x-link type="link" href="/login">Log in</x-link>
                     <x-link-primary type="link" href="/register">Register</x-link-primary>
@@ -31,8 +33,8 @@
 
     {{ $slot }}
 
-    <script src="/js/app.js"></script>
     <livewire:scripts>
+    <script src="/js/app.js"></script>
     <script src="/js/all.min.js"></script>
 </body>
 </html>

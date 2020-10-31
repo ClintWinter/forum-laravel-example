@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Post;
 
 use Livewire\Component;
+use App\Events\CommentPosted;
 
 class Show extends Component
 {
@@ -29,9 +30,16 @@ class Show extends Component
 
     public function addComment()
     {
-        $this->post->comments()->save(
+        $comment = $this->post->comments()->save(
             auth()->user()->comments()->make($this->validate())
         );
+
+        $notifiables = [];
+        if (auth()->user() != $this->post->user)
+            $notifiables[] = $this->post->user;
+
+        if (! empty($notifiables))
+            CommentPosted::dispatch($comment, null, auth()->user(), $notifiables);
 
         $this->comments = $this->post->comments()
             ->where('parent_id', 0)

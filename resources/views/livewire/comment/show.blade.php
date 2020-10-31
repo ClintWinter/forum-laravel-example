@@ -1,6 +1,7 @@
 <div
     class="p-1 mt-2 {{$comment->trashed() ? 'bg-gray-100' : 'bg-white'}}"
     x-data="{ collapsed: false, confirmDelete: false, editing: false }"
+    id="Comment{{ $comment->id }}"
 >
     {{-- headline --}}
     <div class="flex items-center text-xs">
@@ -34,16 +35,16 @@
 
         {{-- post body + edit form --}}
         <div class="flex-grow">
-            <div class="pt-4" x-show="! editing">
+            <div x-show="! editing">
                 @if($comment->trashed())
                     <p>[Deleted]</p>
                 @else
-                    <p>{{$comment->body}}</p>
+                    <p class="pl-4">{{$comment->body}}</p>
                 @endif
             </div>
 
             @can('update', $comment)
-                <div x-show="editing">
+                <div x-show="editing" x-cloak>
                     <textarea name="editBody" placeholder="Comment..." wire:model="comment.body" class="resize-y border border-gray-300 w-full h-32 p-2 mb-8 max-h-64"></textarea>
 
                     <div class="flex justify-end">

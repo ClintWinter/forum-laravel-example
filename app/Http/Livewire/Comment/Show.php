@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Comment;
 
+use App\Events\CommentPosted;
 use Livewire\Component;
 
 class Show extends Component
@@ -30,13 +31,23 @@ class Show extends Component
 
     public function addComment()
     {
-        $this->post->comments()->save(
+        $comment = $this->post->comments()->save(
             auth()->user()->comments()->make(
                 $this->comment->replies()->make([
                     'body' => $this->validate()['reply']
                 ])->attributesToArray()
             )
         );
+
+        $notifiables = [];
+        if (auth()->user() != $this->post->user)
+            $notifiables[] = $this->post->user;
+
+        if (auth()->user() != $this->comment->user)
+            $notifiables[] = $this->comment->user;
+
+        if (! empty($notifiables))
+            CommentPosted::dispatch($comment, $this->comment, auth()->user(), $notifiables);
 
         $this->replies = $this->comment->replies()
             ->with('user')

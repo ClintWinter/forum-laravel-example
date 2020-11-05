@@ -29,6 +29,12 @@ class SendCommentPostedNotification
      */
     public function handle(CommentPosted $event)
     {
+        if (count($notifiables = $this->getNotifiables($event)))
+            Notification::send($notifiables, new NotificationsCommentPosted($event->comment));
+    }
+
+    protected function getNotifiables(CommentPosted $event)
+    {
         $notifiables = [];
 
         // add parent comment owner to notifiable if applicable
@@ -44,7 +50,6 @@ class SendCommentPostedNotification
             $notifiables[] = $event->comment->post->user;
         }
 
-        if (count($notifiables))
-            Notification::send($notifiables, new NotificationsCommentPosted($event->comment));
+        return $notifiables;
     }
 }

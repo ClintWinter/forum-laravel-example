@@ -58,8 +58,6 @@ class CommentPosted extends Notification
      */
     public function toArray($notifiable)
     {
-        return [
-            'comment' => $this->comment,
-        ];
+        return ['comment' => $this->comment];
     }
 }

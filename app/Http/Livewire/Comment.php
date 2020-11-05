@@ -39,15 +39,7 @@ class Comment extends Component
             )
         );
 
-        $notifiables = [];
-        if (auth()->user() != $this->post->user)
-            $notifiables[] = $this->post->user;
-
-        if (auth()->user() != $this->comment->user)
-            $notifiables[] = $this->comment->user;
-
-        if (! empty($notifiables))
-            CommentPosted::dispatch($comment, $this->comment, auth()->user(), $notifiables);
+        CommentPosted::dispatch($comment);
 
         $this->replies = $this->comment->replies()
             ->with('user')

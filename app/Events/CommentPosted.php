@@ -18,23 +18,14 @@ class CommentPosted
 
     public $comment;
 
-    public $parentComment;
-
-    public $commenter;
-
-    public $notifiables;
-
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Comment $comment, $parentComment, User $commenter, array $notifiables)
+    public function __construct(Comment $comment)
     {
         $this->comment = $comment;
-        $this->parentComment = $parentComment;
-        $this->commenter = $commenter;
-        $this->notifiables = $notifiables;
     }
 
     /**

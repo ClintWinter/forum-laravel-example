@@ -34,12 +34,7 @@ class Post extends Component
             auth()->user()->comments()->make($this->validate())
         );
 
-        $notifiables = [];
-        if (auth()->user() != $this->post->user)
-            $notifiables[] = $this->post->user;
-
-        if (! empty($notifiables))
-            CommentPosted::dispatch($comment, null, auth()->user(), $notifiables);
+        CommentPosted::dispatch($comment);
 
         $this->comments = $this->post->comments()
             ->where('parent_id', 0)

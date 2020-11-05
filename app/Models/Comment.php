@@ -13,18 +13,6 @@ class Comment extends Model
 
     protected $fillable = ['body', 'parent_id'];
 
-    // public static function boot()
-    // {
-    //     parent::boot();
-
-        // delete all nested comments recursively? we don't want that actually...
-        // self::deleting(function(Comment $comment) {
-        //     foreach ($comment->comments as $c) {
-        //         $c->delete();
-        //     }
-        // });
-    // }
-
     public function post()
     {
         return $this->belongsTo('App\Models\Post');

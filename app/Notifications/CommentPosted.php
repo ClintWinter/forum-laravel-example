@@ -15,20 +15,14 @@ class CommentPosted extends Notification
 
     public $comment;
 
-    public $parentComment;
-
-    public $commenter;
-
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Comment $comment, $parentComment, User $commenter)
+    public function __construct(Comment $comment)
     {
         $this->comment = $comment;
-        $this->parentComment = $parentComment;
-        $this->commenter = $commenter;
     }
 
     /**
@@ -64,14 +58,8 @@ class CommentPosted extends Notification
      */
     public function toArray($notifiable)
     {
-        $result = [
-            'commenter' => $this->commenter,
+        return [
             'comment' => $this->comment,
         ];
-
-        if ($this->parentComment)
-            $result[] = $this->parentComment;
-
-        return $result;
     }
 }

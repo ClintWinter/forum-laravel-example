@@ -131,12 +131,10 @@ class CommentTest extends TestCase
             ->set('reply', $reply = 'here is my new comment body')
             ->call('addComment');
 
-        Event::assertDispatched(function(CommentPosted $event) use ($reply, $comment, $user) {
-            return $event->comment->body === $reply
-                && $event->parentComment->id === $comment->id
-                && $event->commenter->id === $user->id
-                && in_array( $comment->user, $event->notifiables )
-                && in_array( $comment->post->user, $event->notifiables );
+        Event::assertDispatched(CommentPosted::class, function(CommentPosted $event) use ($reply, $comment, $user) {
+            return $event->comment->body === $reply &&
+                   $event->comment->parent_id === $comment->id &&
+                   $event->comment->user_id === $user->id;
         });
     }
 }

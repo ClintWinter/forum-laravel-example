@@ -54,7 +54,7 @@ class ReactabilityTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_if_a_user_has_a_reaction_on_the_model()
+    public function it_can_check_if_it_has_a_reaction_from_a_user()
     {
         $post = Post::factory()->create();
         $user = User::factory()->create();
@@ -65,7 +65,7 @@ class ReactabilityTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_can_toggle_a_user_reaction()
+    public function it_can_toggle_a_reaction_from_a_user()
     {
         $post = Post::factory()->create();
         $user = User::factory()->create();
@@ -115,7 +115,7 @@ class ReactabilityTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_its_total_score()
+    public function it_can_calculate_its_total_score()
     {
         $post = Post::factory()->create();
         $user1 = User::factory()->create();
@@ -123,10 +123,10 @@ class ReactabilityTraitTest extends TestCase
         $user3 = User::factory()->create();
         $user4 = User::factory()->create();
 
-        $post->upvote($user1);
-        $post->downvote($user2);
-        $post->upvote($user3);
-        $post->react($user4, 5);
+        $post->upvote($user1);      // +1
+        $post->downvote($user2);    // -1
+        $post->upvote($user3);      // +1
+        $post->react($user4, 5);    // +5
 
         $this->assertEquals(6, $post->score());
     }

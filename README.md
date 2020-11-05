@@ -8,13 +8,15 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 - [x] index
 - [x] show
 - [x] add
-    - [ ] dynamically w/Livewire
 - [x] edit
-    - [ ] dynamically w/Livewire
 - [x] delete
 - [ ] markdown formatting
 - [ ] upvote/downvote + score tracking
 - [x] authentication for actions
+- [x] test coverage
+    - [x] livewire tests
+    - [x] unit tests
+    - [x] http/route tests
 
 **Comments**
 - [x] index
@@ -30,6 +32,8 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 - [x] collapsible threads (like reddit)
 - [x] upvote/downvote + score tracking
 - [x] authentication for actions
+- [x] test coverage
+    - [x] livewire tests
 
 **Users**
 - [ ] show
@@ -42,7 +46,7 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
     - [x] Register
 - [x] notification dropdown
     - [x] event that notifies when comments are posted (for original poster and parent comment owner)
-    - [ ] WRITE TESTS FOR THIS
+    - [/] WRITE TESTS FOR THIS
 - [ ] throttle # of posts/comments per hour
 
 &nbsp;

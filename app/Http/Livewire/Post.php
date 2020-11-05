@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Livewire\Post;
+namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Events\CommentPosted;
 
-class Show extends Component
+class Post extends Component
 {
     public $post;
     public $comments;
@@ -53,6 +53,6 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.post.show');
+        return view('livewire.post');
     }
 }

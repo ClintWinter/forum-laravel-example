@@ -5,6 +5,9 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\Post;
 use App\Models\User;
+use Livewire\Livewire;
+use App\Models\Comment;
+use App\Http\Livewire\Post as LivewirePost;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -130,5 +133,37 @@ class PostsTest extends TestCase
         $this->assertDatabaseHas('posts', $post->attributesToArray());
 
         $this->get('/posts/'.$post->id)->assertSee($post->body);
+    }
+
+    /** Livewire Tests */
+
+    /** @test */
+    public function can_add_a_comment()
+    {
+        $this->actingAs(User::factory()->create());
+
+        Livewire::test(LivewirePost::class, ['post' => Post::factory()->create()])
+            ->set('body', $body = 'this is a comment')
+            ->call('addComment');
+
+        $this->assertTrue(Comment::whereBody($body)->exists());
+    }
+
+    /** @test */
+    public function comment_is_required_and_must_be_10_characters_minimum()
+    {
+        $this->actingAs(User::factory()->create());
+
+        Livewire::test(LivewirePost::class, ['post' => Post::factory()->create()])
+            ->call('addComment')
+            ->assertHasErrors(['body' => 'required'])
+
+            ->set('body', 'asdf')
+            ->call('addComment')
+            ->assertHasErrors(['body' => 'min'])
+
+            ->set('body', 'asdf asdf asdf asdf')
+            ->call('addComment')
+            ->assertHasNoErrors('body');
     }
 }

@@ -16,14 +16,19 @@ class Post extends Model
         'created_at' => 'datetime',
     ];
 
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment');
+    }
+
     public function user()
     {
         return $this->belongsTo('App\Models\User');
     }
 
-    public function comments()
+    public function path()
     {
-        return $this->hasMany('App\Models\Comment');
+        return "/posts/{$this->id}";
     }
 
     public function isHot() : bool

@@ -29,7 +29,7 @@ class SendCommentPostedNotification
     public function handle(CommentPosted $event)
     {
         Notification::send(
-            $event->users,
+            $event->notifiables,
             new NotificationsCommentPosted($event->comment, $event->parentComment, $event->commenter)
         );
     }

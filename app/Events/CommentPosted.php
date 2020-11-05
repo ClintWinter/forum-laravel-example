@@ -34,7 +34,7 @@ class CommentPosted
         $this->comment = $comment;
         $this->parentComment = $parentComment;
         $this->commenter = $commenter;
-        $this->users = $notifiables;
+        $this->notifiables = $notifiables;
     }
 
     /**

@@ -22,13 +22,13 @@
         @if(auth()->check() && ! $comment->trashed())
             <div class="w-10 flex flex-col items-center">
                 <x-btn.link wire:click="upvote">
-                    <i class="fas fa-chevron-up {{ $this->comment->hasReactionFrom(auth()->user(), 1) ? 'text-green-500' : '' }}"></i>
+                    <i class="fas fa-chevron-up {{ $this->comment->isUpvotedBy(auth()->user()) ? 'text-green-500' : 'text-gray-300' }}"></i>
                 </x-btn.link>
 
                 <span>{{ $this->comment->score() }}</span>
 
                 <x-btn.link wire:click="downvote">
-                    <i class="fas fa-chevron-down {{ $this->comment->hasReactionFrom(auth()->user(), -1) ? 'text-orange-500' : '' }}"></i>
+                    <i class="fas fa-chevron-down {{ $this->comment->isDownvotedBy(auth()->user()) ? 'text-orange-500' : 'text-gray-300' }}"></i>
                 </x-btn.link>
             </div>
         @endif

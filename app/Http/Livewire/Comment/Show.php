@@ -70,14 +70,12 @@ class Show extends Component
 
     public function upvote()
     {
-        $this->comment->upvote();
-        $this->comment->refresh();
+        $this->comment->upvote(auth()->user());
     }
 
     public function downvote()
     {
-        $this->comment->downvote();
-        $this->comment->refresh();
+        $this->comment->downvote(auth()->user());
     }
 
     public function render()

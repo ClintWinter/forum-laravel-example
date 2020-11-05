@@ -7,38 +7,26 @@ use App\Models\User;
 
 trait Reactability {
 
-    public function upvote()
-    {
-        if ($this->hasReactionFrom(auth()->user(), 1)) {
-            $this->unreact(auth()->user());
-            return;
-        }
-
-        $this->unreact(auth()->User());
-        $this->react(auth()->user(), 1);
-        return;
-    }
-
-    public function downvote()
-    {
-        if ($this->hasReactionFrom(auth()->user(), -1)) {
-            $this->unreact(auth()->User());
-            return;
-        }
-
-        $this->unreact(auth()->user());
-        $this->react(auth()->user(), -1);
-        return;
-    }
-
     public function reactions()
     {
         return $this->morphMany('App\Models\Reaction', 'reactable');
     }
 
-    public function getReaction(User $user)
+    public function react(User $user, $value)
     {
-        return $this->reactions()->where('user_id', $user->id)->first();
+        $reaction = $this->reactions()->create([
+            'user_id' => $user->id,
+            'value' => $value,
+        ]);
+        $this->refresh();
+
+        return $reaction;
+    }
+
+    public function unreact(User $user)
+    {
+        $this->reactions()->where('user_id', $user->id)->delete();
+        $this->refresh();
     }
 
     public function score()
@@ -46,19 +34,6 @@ trait Reactability {
         return $this->reactions->sum(function($reaction) {
             return $reaction->value;
         });
-    }
-
-    public function react(User $user, $value)
-    {
-        $this->reactions()->create([
-            'user_id' => $user->id,
-            'value' => $value,
-        ]);
-    }
-
-    public function unreact(User $user)
-    {
-        $this->reactions()->where('user_id', $user->id)->delete();
     }
 
     public function toggleReaction(User $user, $value)
@@ -69,14 +44,62 @@ trait Reactability {
         return $this->react($user, $value);
     }
 
-    public function hasReactionFrom(User $user, $value = null)
+    public function upvote(User $user)
     {
-        $where = ['user_id' => $user->id];
+        $reaction = $this->getReaction($user);
 
-        if ($value)
-            $where['value'] = $value;
+        if ($reaction === null) {
+            $this->react($user, 1);
+            return;
+        }
 
-        return !! $this->reactions()->where($where)->count();
+        if ($reaction->value === 1) {
+            $this->unreact($user);
+            return;
+        }
+
+        $this->unreact($user);
+        $this->react($user, 1);
+        return;
+    }
+
+    public function isUpvotedBy(User $user)
+    {
+        return $this->hasReactionFrom($user) && $this->getReaction($user)->value === 1;
+    }
+
+    public function downvote(User $user)
+    {
+        $reaction = $this->getReaction($user);
+
+        if ($reaction === null) {
+            $this->react($user, -1);
+            return;
+        }
+
+        if ($reaction->value === -1) {
+            $this->unreact($user);
+            return;
+        }
+
+        $this->unreact($user);
+        $this->react($user, -1);
+        return;
+    }
+
+    public function isDownvotedBy(User $user)
+    {
+        return $this->hasReactionFrom($user) && $this->getReaction($user)->value === -1;
+    }
+
+    public function getReaction(User $user)
+    {
+        return $this->reactions()->whereUserId($user->id)->first();
+    }
+
+    public function hasReactionFrom(User $user)
+    {
+        return $this->reactions()->whereUserId($user->id)->exists();
     }
 
 }

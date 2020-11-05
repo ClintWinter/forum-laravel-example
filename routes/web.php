@@ -17,12 +17,6 @@ Route::middleware('auth')->group(function() {
     Route::get('/posts/{post}/edit', [PostController::class, 'edit']);
     Route::patch('/posts/{post}', [PostController::class, 'update']);
     Route::delete('/posts/{post}', [PostController::class, 'destroy']);
-    
-    Route::post('/posts/{post}/comments', [CommentController::class, 'store']);
-    Route::delete('/posts/{post}/comments/{comment}', [CommentController::class, 'destroy']);
-
-    Route::post('/reactable-posts/{$post}', [ReactablePostController::class, 'store']);
-    Route::post('/reactable-comments/{$comment}', [ReactableCommentController::class, 'store']);
 });
 Route::get('/posts/{post}', [PostController::class, 'show']);
 

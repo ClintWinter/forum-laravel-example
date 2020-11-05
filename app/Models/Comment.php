@@ -13,9 +13,9 @@ class Comment extends Model
 
     protected $fillable = ['body', 'parent_id'];
 
-    public static function boot()
-    {
-        parent::boot();
+    // public static function boot()
+    // {
+    //     parent::boot();
 
         // delete all nested comments recursively? we don't want that actually...
         // self::deleting(function(Comment $comment) {
@@ -23,7 +23,7 @@ class Comment extends Model
         //         $c->delete();
         //     }
         // });
-    }
+    // }
 
     public function post()
     {

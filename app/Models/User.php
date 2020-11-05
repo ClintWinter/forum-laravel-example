@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Post');
     }
+
+    public function reactions()
+    {
+        return $this->hasMany('App\Models\Reaction');
+    }
 }

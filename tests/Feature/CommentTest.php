@@ -8,33 +8,16 @@ use App\Models\User;
 use Livewire\Livewire;
 use App\Models\Comment;
 use App\Events\CommentPosted;
-use App\Http\Livewire\Comment as LivewireComment;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Notification;
+use App\Http\Livewire\Comment as LivewireComment;
+use App\Notifications\CommentPosted as CommentPostedNotification;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CommentTest extends TestCase
 {
     use WithFaker, DatabaseTransactions;
-
-    /** @test */
-    public function comment_has_a_post_and_a_user()
-    {
-        $user = User::factory()->create();
-
-        $this->actingAs($user);
-
-        $post = Post::factory()->create();
-
-        $comment = $post->comments()->save(
-            auth()->user()->comments()->make([
-                'body' => 'this is the body'
-            ])
-        );
-
-        $this->assertEquals($comment->post_id, $post->id);
-        $this->assertEquals($comment->user_id, $user->id);
-    }
 
     /** @test */
     public function component_mounts_with_post_and_replies()
@@ -125,7 +108,7 @@ class CommentTest extends TestCase
     }
 
     /** @test */
-    public function adding_comment_dispatches_comment_posted_event()
+    public function adding_comment_dispatches_CommentPosted_event()
     {
         Event::fake();
 
@@ -140,5 +123,68 @@ class CommentTest extends TestCase
                    $event->comment->parent_id === $comment->id &&
                    $event->comment->user_id === $user->id;
         });
+    }
+
+    /** @test */
+    public function adding_comment_notifies_post_owner_and_parent_comment_owner_with_CommentPosted_notification()
+    {
+        Notification::fake();
+
+        Notification::assertNothingSent();
+
+        $this->actingAs(User::factory()->create());
+
+        $differentUser = User::factory()->create();
+        $post = Post::factory()->create(['user_id' => $differentUser->id]);
+
+        Livewire::test(
+            LivewireComment::class,
+            [
+                'comment' => $comment = Comment::factory()->create([
+                    'post_id' => $post->id,
+                    'user_id' => $differentUser->id,
+                ]),
+            ]
+        // the added reply will use actingAs user (different from parent comment & post)
+        )->set('reply', $reply = 'here is my new comment body')
+         ->call('addComment');
+
+        $newComment = Comment::whereBody($reply)->whereParentId($comment->id)->first();
+
+        Notification::assertSentTo(
+            [$comment->user, $comment->post->user],
+            function(CommentPostedNotification $notification) use ($newComment) {
+                return $notification->comment->id === $newComment->id;
+            }
+        );
+    }
+
+    /** @test */
+    public function adding_comment_doesnt_notify_owners_with_CommentPosted_notification_when_owners_are_same_as_comment_owner()
+    {
+        Notification::fake();
+
+        Notification::assertNothingSent();
+
+        $this->actingAs($user = User::factory()->create());
+
+        $post = Post::factory()->create(['user_id' => $user->id]);
+
+        Livewire::test(
+            LivewireComment::class,
+            [
+                'comment' => $comment = Comment::factory()->create([
+                    'post_id' => $post->id,
+                    'user_id' => $user->id,
+                ]),
+            ]
+        // the added reply will use actingAs user (same as parent comment & post)
+        )->set('reply', 'here is my new comment body')
+         ->call('addComment');
+
+        Notification::assertNotSentTo(
+            [$comment->user, $comment->post->user],
+            CommentPostedNotification::class
+        );
     }
 }

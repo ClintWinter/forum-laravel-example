@@ -38,17 +38,12 @@ class SendCommentPostedNotification
         $notifiables = [];
 
         // add parent comment owner to notifiable if applicable
-        if ($event->comment->parent_id) {
-            $parentOwner = Comment::find($event->comment->parent_id)->user;
-
-            if ($event->comment->user_id !== $parentOwner->id)
-                $notifiables[] = $parentOwner;
-        }
+        if ($event->comment->parent()->exists() && $event->comment->parent->user_id !== $event->comment->user_id)
+            $notifiables[] = $event->comment->parent->user;
 
         // add post owner to notifiable if applicable
-        if ($event->comment->user_id !== $event->comment->post->user_id) {
+        if ($event->comment->user_id !== $event->comment->post->user_id)
             $notifiables[] = $event->comment->post->user;
-        }
 
         return $notifiables;
     }

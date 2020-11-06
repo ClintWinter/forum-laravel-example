@@ -2,14 +2,18 @@
 
 namespace Tests\Feature;
 
+use App\Events\CommentPosted;
 use Tests\TestCase;
 use App\Models\Post;
 use App\Models\User;
 use Livewire\Livewire;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Event;
 use App\Http\Livewire\Post as LivewirePost;
+use App\Notifications\CommentPosted as CommentPostedNotification;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Notification;
 
 class PostsTest extends TestCase
 {
@@ -27,9 +31,20 @@ class PostsTest extends TestCase
 
         $this->post('/posts', $attributes);
 
-        $this->assertDatabaseHas('posts', $attributes);
+        $this->assertDatabaseHas('posts', $attributes)
+            ->get('/posts')
+            ->assertSee($attributes['title']);
+    }
 
-        $this->get('/posts')->assertSee($attributes['title']);
+    /** @test */
+    public function a_guest_cannot_create_a_post()
+    {
+        $attributes = [
+            'title' => $this->faker->sentence,
+            'body' => $this->faker->paragraph,
+        ];
+
+        $this->post('/posts', $attributes)->assertRedirect('login');
     }
 
     /** @test */
@@ -165,5 +180,61 @@ class PostsTest extends TestCase
             ->set('body', 'asdf asdf asdf asdf')
             ->call('addComment')
             ->assertHasNoErrors('body');
+    }
+
+    /** @test */
+    public function adding_comment_dispatches_CommentPosted_event()
+    {
+        Event::fake();
+
+        $this->actingAs(User::factory()->create());
+
+        Livewire::test(LivewirePost::class, ['post' => $post = Post::factory()->create()])
+            ->set('body', $reply = 'asdf asdf asdf asdf')
+            ->call('addComment');
+
+        Event::assertDispatched(CommentPosted::class, function(CommentPosted $event) use ($post, $reply) {
+            return $event->comment->post_id === $post->id &&
+                   $event->comment->body === $reply &&
+                   $event->comment->parent_id === null;
+        });
+    }
+
+    /** @test */
+    public function adding_comment_notifies_post_owner_with_CommentPosted_notification()
+    {
+        Notification::fake();
+
+        Notification::assertNothingSent();
+
+        $this->actingAs(User::factory()->create());
+        $user2 = User::factory()->create();
+
+        Livewire::test(LivewirePost::class, ['post' => $post = Post::factory()->create(['user_id' => $user2->id])])
+            ->set('body', $reply = 'asdf asdf asdf asdf')
+            ->call('addComment');
+
+        Notification::assertSentTo(
+            [$post->user],
+            function(CommentPostedNotification $notification) use ($reply) {
+                return $notification->comment->body === $reply;
+            }
+        );
+    }
+
+    /** @test */
+    public function adding_comment_doesnt_notify_post_owner_with_CommentPosted_notification_when_post_owner_is_comment_owner()
+    {
+        Notification::fake();
+
+        Notification::assertNothingSent();
+
+        $this->actingAs($user = User::factory()->create());
+
+        Livewire::test(LivewirePost::class, ['post' => $post = Post::factory()->create(['user_id' => $user->id])])
+            ->set('body', 'asdf asdf asdf asdf')
+            ->call('addComment');
+
+        Notification::assertNotSentTo([$post->user], CommentPostedNotification::class);
     }
 }

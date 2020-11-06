@@ -4,6 +4,20 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 
 ## TODO
 
+### This Week (2020-11-06)
+
+- [] find a way to implement Redis + Queues
+- [] work through some of the questions in Learning Goals
+- [] study/use magic methods & higher-order methods
+- [] create scenarios to use design patterns outside of this project
+    - [] observer
+    - [] decorator
+    - [] singleton
+    - [] facade
+    - [] proxy
+
+### Features
+
 **Posts**
 - [x] index
 - [x] show

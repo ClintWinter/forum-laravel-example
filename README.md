@@ -55,7 +55,7 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 
 - **(Yes)** Experienced building API's (Oauth, Http::class, Webhooks)
 - **(Yes)** TailwindCSS, Livewire, Blade
-- **(No)** TDD Experience
+- **(Some)** TDD Experience
 - Very good understanding of Laravel and it's Concepts/Tools
     - **(2)** Eloquent/Models
         - polymorphic relationship
@@ -69,10 +69,10 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
         - have you used custom validation classes
         - how do the errors get into the view?
     - **(2)** Service Providers
-    - **(0)** Events
+    - **(2)** Events
         - what should events be used for
         - why are they good
-    - **(1)** Notifications
+    - **(2)** Notifications
         - where and how should you use notifications, custom channels?
     - **(3)** Controllers
         - RESTful or not?
@@ -87,3 +87,92 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
     - **(2)** Identify which concepts are in charge of which decisions/actions
     - **(1)** Design Patterns
     - **(1)** Iterative Process Mentality (MVP)
+
+***
+
+## Notes
+
+### Be super clear with naming your tests
+before:
+`adding_comment_is_required_and_must_be_5_characters_minimum`
+
+after:
+`comment_body_is_required_and_must_be_5_characters_minimum`
+
+
+### take advantage of higher-order methods
+
+before:
+``` php
+return $this->reactions->sum(function($reaction) {
+    return $reaction->value;
+});
+```
+
+after:
+``` php
+return $this->reactions->sum('value');
+// or
+return $this->reactions->sum->value;
+```
+
+### naming events and notifications
+It's okay if event/notification names overlap since they are so similar, but properly alias when necessary so they are clear.
+
+before, PHP namespace resolver defaulted to:
+``` php
+use App\Events\CommentPosted;
+use App\Notifications\CommentPosted as NotificationsCommentPosted;
+```
+
+we changed it to:
+``` php
+use App\Events\CommentPosted;
+use App\Notifications\CommentPosted as CommentPostedNotification;
+```
+
+### learned some alpinejs order of operations
+In a dropdown with `@click.away` on the container and `@click` on the button, it first executes the button `@click` and then the `@click.away` event. That means the button does not need to toggle open/closed for the dropdown because `@click.away` will catch it.
+
+before:
+```html
+<div x-data="{open:false}">
+    <button
+        @click="
+            if (open) $wire.clearNotifications();
+            open = !open;
+        "
+    >Trigger</button>
+
+    <section
+        x-show="open"
+        @click.away="
+            if (open) $wire.clearNotifications();
+            open = false;
+        "
+    >This is the dropdown container</section>
+</div>
+```
+
+In the above example, we are doing more work than necessary because of a lack of understanding of the order of operations. `@click.away` will execute when the dropdown is showing and we click outside of the dropdown. That includes clicking the button. When clicking the button to close the dropdown, first the button's `@click` will execute, then the dropdown's `@click.away`.
+
+What we have above is button's `@click` trying to do what the dropdown's `@click.away` will already handle because we don't know how it works.
+
+after:
+```html
+<div x-data="{open:false}">
+    <button
+        @click="open = true"
+    >Trigger</button>
+
+    <section
+        x-show="open"
+        @click.away="
+            $wire.clearNotifications();
+            open = false;
+        "
+    >This is the dropdown container</section>
+</div>
+```
+
+If you're asking how the button can close the dropdown when `open` is set to `true` every time, remember the order of operations. Whenever the dropdown is showing, `@click.away` will execute when we click the button AFTER the button's `@click`. So we click the button with the dropdown open and in `@click`, `open` stays `true`. Then in `@click.away` we clear the notifications and set `open = false` to close it. This is also nice because now we have one place to handle closing the dropdown along with any associated actions. Before, we would have tried to handle clearing notifications in the button event and the dropdown's click away event by using if statements to check the status of `open`.

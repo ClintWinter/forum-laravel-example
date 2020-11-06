@@ -31,9 +31,7 @@ trait Reactability {
 
     public function score()
     {
-        return $this->reactions->sum(function($reaction) {
-            return $reaction->value;
-        });
+        return $this->reactions->sum('value');
     }
 
     public function toggleReaction(User $user, $value)

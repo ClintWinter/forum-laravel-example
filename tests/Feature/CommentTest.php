@@ -57,11 +57,11 @@ class CommentTest extends TestCase
     }
 
     /** @test */
-    public function adding_comment_is_required_and_must_be_5_characters_minimum()
+    public function comment_body_is_required_and_must_be_5_characters_minimum()
     {
         $this->actingAs(User::factory()->create());
 
-        Livewire::test(LivewireComment::class, ['comment' => $comment = Comment::factory()->create()])
+        Livewire::test(LivewireComment::class, ['comment' => Comment::factory()->create()])
             ->call('addComment')
             ->assertHasErrors(['reply' => 'required'])
 
@@ -79,10 +79,14 @@ class CommentTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        Livewire::test(LivewireComment::class, ['comment' => Comment::factory()->create()])
+        Livewire::test(LivewireComment::class, ['comment' => $comment = Comment::factory()->create()])
             ->set('comment.body', $reply = 'updated comment body')
-            ->call('editComment')
-            ->assertSee($reply);
+            ->call('editComment');
+
+        $this->assertDatabaseHas('comments', [
+            'id' => $comment->id,
+            'body' => $reply,
+        ]);
     }
 
     /** @test */
@@ -106,7 +110,7 @@ class CommentTest extends TestCase
         Livewire::test(LivewireComment::class, ['comment' => $comment = Comment::factory()->create()])
             ->call('upvote');
 
-        $this->assertEquals(1, Comment::find($comment->id)->score());
+        $this->assertEquals(1, $comment->fresh()->score());
     }
 
     /** @test */
@@ -117,7 +121,7 @@ class CommentTest extends TestCase
         Livewire::test(LivewireComment::class, ['comment' => $comment = Comment::factory()->create()])
             ->call('downvote');
 
-        $this->assertEquals(-1, Comment::find($comment->id)->score());
+        $this->assertEquals(-1, $comment->fresh()->score());
     }
 
     /** @test */

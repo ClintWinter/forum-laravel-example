@@ -7,7 +7,7 @@ use App\Events\CommentPosted;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\CommentPosted as NotificationsCommentPosted;
+use App\Notifications\CommentPosted as CommentPostedNotification;
 
 class SendCommentPostedNotification
 {
@@ -30,7 +30,7 @@ class SendCommentPostedNotification
     public function handle(CommentPosted $event)
     {
         if (count($notifiables = $this->getNotifiables($event)))
-            Notification::send($notifiables, new NotificationsCommentPosted($event->comment));
+            Notification::send($notifiables, new CommentPostedNotification($event->comment));
     }
 
     protected function getNotifiables(CommentPosted $event)

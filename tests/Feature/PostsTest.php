@@ -11,13 +11,13 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\Event;
 use App\Http\Livewire\Post as LivewirePost;
 use App\Notifications\CommentPosted as CommentPostedNotification;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Notification;
 
 class PostsTest extends TestCase
 {
-    use WithFaker, DatabaseTransactions;
+    use WithFaker, RefreshDatabase;
 
     /** @test */
     public function an_authorized_user_can_create_a_post()
@@ -71,13 +71,10 @@ class PostsTest extends TestCase
     /** @test */
     public function a_user_can_update_their_own_post()
     {
-        $user = User::factory()->create();
-
+        $user = User::factory()->hasPosts(1)->create();
         $this->actingAs($user);
 
-        $post = Post::factory()->create([
-            'user_id' => $user->id,
-        ]);
+        $post = $user->posts()->first();
 
         $attributes = [
             'body' => $this->faker->paragraph,
@@ -93,14 +90,12 @@ class PostsTest extends TestCase
     /** @test */
     public function a_user_cannot_update_another_users_post()
     {
-        $user1 = User::factory()->create();
-        $user2 = User::factory()->create();
+        $nonPostOwner = User::factory()->create();
+        $postOwner = User::factory()->hasPosts(1)->create();
 
-        $this->actingAs($user1);
+        $this->actingAs($nonPostOwner);
 
-        $post = Post::factory()->create([
-            'user_id' => $user2->id,
-        ]);
+        $post = $postOwner->posts()->first();
 
         $attributes = [
             'body' => $this->faker->paragraph,
@@ -116,13 +111,11 @@ class PostsTest extends TestCase
     /** @test */
     public function a_user_can_delete_their_post()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->hasPosts(1)->create();
 
         $this->actingAs($user);
 
-        $post = Post::factory()->create([
-            'user_id' => $user->id,
-        ]);
+        $post = $user->posts()->first();
 
         $this->assertDatabaseHas('posts', $post->attributesToArray());
 
@@ -134,20 +127,36 @@ class PostsTest extends TestCase
     /** @test */
     public function a_user_cannot_delete_another_users_post()
     {
-        $user1 = User::factory()->create();
-        $user2 = User::factory()->create();
+        $authUser = User::factory()->create();
+        $postUser = User::factory()->hasPosts(1)->create();
 
-        $this->actingAs($user1);
+        $this->actingAs($authUser);
 
-        $post = Post::factory()->create([
-            'user_id' => $user2->id,
-        ]);
+        $post = $postUser->posts()->first();
 
         $this->delete('/posts/'.$post->id)->assertStatus(403);
 
         $this->assertDatabaseHas('posts', $post->attributesToArray());
 
         $this->get('/posts/'.$post->id)->assertSee($post->body);
+    }
+
+    /** @test */
+    public function a_hot_post_displays_an_icon_to_users_in_the_posts_list()
+    {
+        $post = Post::factory()->create();
+
+        $this->assertFalse($post->isHot());
+
+        $this->get('/posts')
+            ->assertDontSee('<i title="This post is trending." class="fas fa-fire text-orange-400"></i>', false);
+
+        $post->comments()->saveMany(Comment::factory(11)->create());
+
+        $this->assertTrue($post->isHot());
+
+        $this->get('/posts')
+            ->assertSee('<i title="This post is trending." class="fas fa-fire text-orange-400"></i>', false);
     }
 
     /** Livewire Tests */

@@ -4,13 +4,13 @@ namespace Tests\Unit;
 
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class ReactabilityTraitTest extends TestCase
 {
-    use WithFaker, DatabaseTransactions;
+    use WithFaker, RefreshDatabase;
 
     /** @test */
     public function it_can_be_reacted_to_with_a_value()
@@ -118,15 +118,11 @@ class ReactabilityTraitTest extends TestCase
     public function it_can_calculate_its_total_score()
     {
         $post = Post::factory()->create();
-        $user1 = User::factory()->create();
-        $user2 = User::factory()->create();
-        $user3 = User::factory()->create();
-        $user4 = User::factory()->create();
 
-        $post->upvote($user1);      // +1
-        $post->downvote($user2);    // -1
-        $post->upvote($user3);      // +1
-        $post->react($user4, 5);    // +5
+        $post->upvote(User::factory()->create());      // +1
+        $post->downvote(User::factory()->create());    // -1
+        $post->upvote(User::factory()->create());      // +1
+        $post->react(User::factory()->create(), 5);    // +5
 
         $this->assertEquals(6, $post->score());
     }

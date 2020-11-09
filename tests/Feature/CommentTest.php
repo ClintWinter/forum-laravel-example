@@ -13,11 +13,11 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Livewire\Comment as LivewireComment;
 use App\Notifications\CommentPosted as CommentPostedNotification;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CommentTest extends TestCase
 {
-    use WithFaker, DatabaseTransactions;
+    use WithFaker, RefreshDatabase;
 
     /** @test */
     public function component_mounts_with_post_and_replies()
@@ -134,15 +134,14 @@ class CommentTest extends TestCase
 
         $this->actingAs(User::factory()->create());
 
-        $differentUser = User::factory()->create();
-        $post = Post::factory()->create(['user_id' => $differentUser->id]);
+        $post = Post::factory()->create();
 
         Livewire::test(
             LivewireComment::class,
             [
                 'comment' => $comment = Comment::factory()->create([
                     'post_id' => $post->id,
-                    'user_id' => $differentUser->id,
+                    'user_id' => $post->user->id,
                 ]),
             ]
         // the added reply will use actingAs user (different from parent comment & post)
@@ -166,16 +165,16 @@ class CommentTest extends TestCase
 
         Notification::assertNothingSent();
 
-        $this->actingAs($user = User::factory()->create());
+        $post = Post::factory()->create();
 
-        $post = Post::factory()->create(['user_id' => $user->id]);
+        $this->actingAs($post->user);
 
         Livewire::test(
             LivewireComment::class,
             [
                 'comment' => $comment = Comment::factory()->create([
                     'post_id' => $post->id,
-                    'user_id' => $user->id,
+                    'user_id' => $post->user->id,
                 ]),
             ]
         // the added reply will use actingAs user (same as parent comment & post)

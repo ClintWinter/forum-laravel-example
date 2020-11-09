@@ -7,6 +7,7 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 ### This Week (2020-11-06)
 
 - [x] add testing for notifications
+- [ ] test "hot" on the front-end
 - [ ] find a way to implement Redis + Queues
 - [ ] work through some of the questions in Learning Goals
 - [ ] study/use magic methods & higher-order methods
@@ -114,9 +115,10 @@ before:
 after:
 `comment_body_is_required_and_must_be_5_characters_minimum`
 
+### Test what we actually care about
+We originally were testing the `isHot` method directly on a post, but we don't actually care about that. We care that posts that are hot have an icon in the list of posts. That's what we should ultimately test.
 
-### take advantage of higher-order methods
-
+### Take advantage of higher-order methods
 before:
 ``` php
 return $this->reactions->sum(function($reaction) {
@@ -131,7 +133,7 @@ return $this->reactions->sum('value');
 return $this->reactions->sum->value;
 ```
 
-### naming events and notifications
+### Naming events and notifications
 It's okay if event/notification names overlap since they are so similar, but properly alias when necessary so they are clear.
 
 before, PHP namespace resolver defaulted to:
@@ -146,7 +148,7 @@ use App\Events\CommentPosted;
 use App\Notifications\CommentPosted as CommentPostedNotification;
 ```
 
-### learned some alpinejs order of operations
+### Learned some AlpineJS order of operations
 In a dropdown with `@click.away` on the container and `@click` on the button, it first executes the button `@click` and then the `@click.away` event. That means the button does not need to toggle open/closed for the dropdown because `@click.away` will catch it.
 
 before:

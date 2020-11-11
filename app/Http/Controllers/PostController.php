@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 
 class PostController extends Controller
 {
@@ -19,7 +20,9 @@ class PostController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('posts.index', compact('posts'));
+        $views = Redis::hGetAll('posts:views');
+
+        return view('posts.index', compact('posts', 'views'));
     }
 
     public function create()
@@ -41,6 +44,8 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
+        Redis::hIncrBy("posts:views", $post->id, 1);
+
         return view('posts.show', compact('post'));
     }
 

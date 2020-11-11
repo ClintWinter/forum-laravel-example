@@ -1,10 +1,7 @@
 <?php
 
-use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\ReactablePostController;
-use App\Models\Post;
 
 Route::get('/', function() {
     return redirect('/posts');
@@ -19,7 +16,3 @@ Route::middleware('auth')->group(function() {
     Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 });
 Route::get('/posts/{post}', [PostController::class, 'show']);
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');

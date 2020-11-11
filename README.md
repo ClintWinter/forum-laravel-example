@@ -7,8 +7,12 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 ### This Week (2020-11-06)
 
 - [x] add testing for notifications
-- [ ] test "hot" on the front-end
-- [ ] find a way to implement Redis + Queues
+- [x] test "hot" on the front-end
+- [x] find a way to implement Redis + Queues
+    - [x] add Redis
+    - [x] turn "CommentPosted" notification into queueable
+    - [x] add "mail" as delivery channel
+        - [x] verify emails in mailtrap
 - [ ] work through some of the questions in Learning Goals
 - [ ] study/use magic methods & higher-order methods
 - [ ] create scenarios to use design patterns outside of this project

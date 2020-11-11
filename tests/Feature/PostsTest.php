@@ -156,7 +156,7 @@ class PostsTest extends TestCase
         $this->assertTrue($post->isHot());
 
         $this->get('/posts')
-            ->assertSee('<i title="This post is trending." class="fas fa-fire text-orange-400"></i>', false);
+            ->assertSee('<i title="This post is trending." class="fas fa-fire text-orange-500"></i>', false);
     }
 
     /** Livewire Tests */

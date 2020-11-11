@@ -16,30 +16,25 @@
             @foreach ($posts as $post)
                 <div class="w-full mx-4 mb-4 pb-4 flex items-center justify-between border-b border-gray-100 last:border-b-0">
                     <div class="flex-grow">
-                        <h2 class="font-bold leading-none" title="{{ \Str::limit($post->body, 100) }}">
+                        <h2 class="font-bold leading-none mb-2" title="{{ \Str::limit($post->body, 100) }}">
                             <x-link href="/posts/{{ $post->id }}">{{ $post->title }}</x-link>
                         </h2>
 
                         <div class="flex justify-between items-end">
-                            <p>
-                                <small class="text-xs text-gray-600">
-                                    <i class="fas fa-user"></i>
-                                    <a
-                                        class="underline"
-                                        href="/users/{{$post->user->id}}"
-                                    >{{ $post->user->name }}</a>
-                                    • {{ $post->created_at->diffForHumans() }}
-                                </small>
-                            </p>
+                            <p class="text-xs text-gray-600"><i class="fas fa-user"></i> <a class="underline" href="/users/{{$post->user->id}}">{{ $post->user->name }}</a> • {{ $post->created_at->diffForHumans() }}</p>
                         </div>
                     </div>
 
-                    <div class="right-side flex items-center space-x-2">
+                    <div class="mr-4">
                         @if($post->isHot())
-                            <i title="This post is trending." class="fas fa-fire text-orange-400"></i>
+                            <i title="This post is trending." class="fas fa-fire text-orange-500"></i>
                         @endif
+                    </div>
 
+                    <div class="flex flex-col justify-center items-end space-y-2">
                         <p class="text-sm text-gray-600">{{$post->comments_count}} <i class="fas fa-comments text-gray-400"></i></p>
+
+                        <p class="text-sm text-gray-600">{{ $views[$post->id] ?? 0 }} <i class="fas fa-eye text-gray-400"></i></p>
                     </div>
                 </div>
             @endforeach

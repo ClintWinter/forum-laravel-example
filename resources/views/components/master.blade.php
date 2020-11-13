@@ -18,9 +18,15 @@
         <div class="container mx-auto flex justify-between items-center p-4">
             <h1 class="font-black text-lg text-indigo-600"><a href="/posts">ForumApp</a></h1>
 
+            @error('throttle:actions')
+                <div class="bg-red-100 border border-red-600 rounded text-red-700">{{ $errors->first('throttle:actions') }}</div>
+            @enderror
+
             <div class="flex items-center space-x-4">
                 @auth
-                    <livewire:notifications />
+                    @if (auth()->user()->notifications()->exists())
+                        <livewire:notifications />
+                    @endif
 
                     <x-form-button action="/logout" method="POST"><x-btn.secondary type="submit">{{ auth()->user()->name }}</x-btn.secondary></x-form-button>
                 @else

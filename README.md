@@ -2,9 +2,12 @@
 
 A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 
-## TODO
+## Questions
 
-### This Week (2020-11-06)
+- rate limiting in Livewire?
+- best way to handle cached data and pass into views?
+
+## TODO
 
 - [x] add testing for notifications
 - [x] test "hot" on the front-end
@@ -13,6 +16,7 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
     - [x] turn "CommentPosted" notification into queueable
     - [x] add "mail" as delivery channel
         - [x] verify emails in mailtrap
+- [ ] ***!! figure out how to use rate limiting in Livewire !!***
 - [ ] work through some of the questions in Learning Goals
 - [ ] study/use magic methods & higher-order methods
 - [ ] create scenarios to use design patterns outside of this project
@@ -21,6 +25,15 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
     - [ ] singleton
     - [ ] facade
     - [ ] proxy
+
+also:
+- added separate testing database
+- added redis
+- figured out vscode terminal to use
+    - laragon's path for php.ini
+    - redis-cli
+    - queue workers
+- added mailtrap support
 
 ### Features
 

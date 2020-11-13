@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire;
 
-use App\Events\CommentPosted;
 use Livewire\Component;
+use App\Events\CommentPosted;
 
 class Comment extends Component
 {

@@ -1,5 +1,5 @@
 <div
-    class="p-1 mt-2 {{$comment->trashed() ? 'bg-gray-100' : 'bg-white'}}"
+    class="p-1 mt-2 {{$comment->trashed() ? 'bg-gray-100' : 'bg-white'}} border border-gray-200"
     x-data="{ collapsed: false, confirmDelete: false, editing: false }"
     id="Comment{{ $comment->id }}"
 >
@@ -109,6 +109,6 @@
 
     {{-- nested comment list --}}
     @if($replies->count())
-        <x-comment.list x-show="! collapsed" class="mt-4 border-l border-gray-400 p-2" :comments="$replies" />
+        <x-comment.list x-show="! collapsed" class="mt-4" :comments="$replies" />
     @endif
 </div>

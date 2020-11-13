@@ -46,9 +46,9 @@
         {{-- new comment --}}
         @auth
             <div class="mt-16 bg-gray-100 border border-gray-300 rounded-sm p-4">
-                @if($errors->any())
+                @if($errors->has('body'))
                     <div class="border border-red-600 rounded-sm bg-red-300 text-red-900 p-4 pb-2 mb-4">
-                        @foreach ($errors->all() as $error)
+                        @foreach ($errors->get('body') as $error)
                             <p class="mb-2">{{ $error }}</p>
                         @endforeach
                     </div>

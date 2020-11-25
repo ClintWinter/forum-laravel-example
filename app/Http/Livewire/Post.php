@@ -46,6 +46,16 @@ class Post extends Component
         $this->reset(['body']);
     }
 
+    public function upvote()
+    {
+        $this->post->upvote(auth()->user());
+    }
+
+    public function downvote()
+    {
+        $this->post->downvote(auth()->user());
+    }
+
     public function render()
     {
         return view('livewire.post');

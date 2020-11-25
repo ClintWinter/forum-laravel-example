@@ -7,13 +7,15 @@
 
     <link rel="icon" href="data:,">
 
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <livewire:styles>
 
     <title>Forum App</title>
 </head>
-<body>
+<body class="font-sans">
     <div class="shadow">
         <div class="container mx-auto flex justify-between items-center p-4">
             <h1 class="font-black text-lg text-indigo-600"><a href="/posts">ForumApp</a></h1>
@@ -27,12 +29,28 @@
                     @if (auth()->user()->notifications()->exists())
                         <livewire:notifications />
                     @endif
-
-                    <x-form-button action="/logout" method="POST"><x-btn.secondary type="submit">{{ auth()->user()->name }}</x-btn.secondary></x-form-button>
+                    <div class="mr-4 text-sm">Active: {{ auth()->user()->name }}</div>
                 @else
-                    <x-link type="link" href="/login">Log in</x-link>
                     <x-link-primary type="link" href="/register">Register</x-link-primary>
                 @endauth
+
+                <div x-data="{open:false}" class="relative">
+                    <button class="cursor-pointer" @click="open=true">Switch User <i class="fas fa-chevron-down ml-2"></i></button>
+
+                    <div class="absolute w-40 py-2 px-4 bg-white shadow rounded right-0 mt-2 border border-gray-200" x-cloak x-show="open" @click.away="open=false">
+                        @foreach ($switchableUsers as $user)
+                            <form class="pb-1 border-b border-gray-100 last:border-b-0" method="POST" action="/switch-user">
+                                @csrf
+                                <input type="hidden" name="email" value="{{ $user->email }}">
+                                <button type="submit" class="leading-none text-xs text-blue-500 hover:underline">{{ $user->name }}</button>
+                            </form>
+                        @endforeach
+
+                        @auth
+                            <x-form-button class="w-full" action="/logout" method="POST"><button type="submit" class="w-full font-bold text-center mt-2 text-blue-500 hover:underline cursor-pointer">Log Out</button></x-form-button>
+                        @endauth
+                    </div>
+                </div>
             </div>
         </div>
     </div>

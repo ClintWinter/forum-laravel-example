@@ -3,9 +3,9 @@
     'method' => 'GET'
 ])
 
-<form 
-    class="inline-block" 
-    action="{{$action}}" 
+<form
+    class="{{ $attributes->merge(['class' => 'inline-block']) }}"
+    action="{{$action}}"
     method="{{$method === 'GET' ? 'GET' : 'POST'}}"
 >
     @csrf

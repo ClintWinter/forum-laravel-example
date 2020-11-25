@@ -5,12 +5,29 @@
         <div class="px-4 py-2 mb-4">
             <h1 class="text-xl font-bold leading-tight py-4 mb-8">{{ $post->title }}</h1>
 
-            <p class="whitespace-pre-wrap mb-12">{{ $post->body }}</p>
+            <div class="mb-12 flex">
+                {{-- score --}}
+                @if(auth()->check())
+                    <div class="w-10 flex flex-col items-center mr-4">
+                        <x-btn.link wire:click="upvote">
+                            <i class="fas fa-chevron-up {{ $this->post->isUpvotedBy(auth()->user()) ? 'text-green-500' : 'text-gray-300' }}"></i>
+                        </x-btn.link>
+
+                        <span>{{ $this->post->score() }}</span>
+
+                        <x-btn.link wire:click="downvote">
+                            <i class="fas fa-chevron-down {{ $this->post->isDownvotedBy(auth()->user()) ? 'text-orange-500' : 'text-gray-300' }}"></i>
+                        </x-btn.link>
+                    </div>
+                @endif
+
+                <p class="whitespace-pre-wrap">{{ $post->body }}</p>
+            </div>
 
             <div class="flex justify-between">
                 <p class="text-gray-700 text-xs flex items-center space-x-2">
                     <i class="fas fa-user text-lg"></i>
-                    <span class="font-bold text-gray-900 text-sm mr-1">{{ $post->user->name }}</span>
+                    <a href="{{ $post->user->path() }}" class="font-bold text-gray-900 text-sm mr-1">{{ $post->user->name }}</a>
                     <span>{{ $post->created_at->diffForHumans() }}</span>
                 </p>
 

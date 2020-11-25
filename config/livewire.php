@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'middleware_group'  => ['web', 'throttle:actions'],
+    'middleware_group'  => 'web',
 
     /*
     |--------------------------------------------------------------------------

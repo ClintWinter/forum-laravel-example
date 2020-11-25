@@ -16,7 +16,7 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
     - [x] turn "CommentPosted" notification into queueable
     - [x] add "mail" as delivery channel
         - [x] verify emails in mailtrap
-- [ ] ***!! figure out how to use rate limiting in Livewire !!***
+- [ ] figure out how to use rate limiting in Livewire
 - [ ] work through some of the questions in Learning Goals
 - [ ] study/use magic methods & higher-order methods
 - [ ] create scenarios to use design patterns outside of this project
@@ -29,11 +29,25 @@ A sample project to showcase TailwindCSS, AlpineJS, Laravel, and Livewire.
 also:
 - added separate testing database
 - added redis
-- figured out vscode terminal to use
-    - laragon's path for php.ini
-    - redis-cli
-    - queue workers
+- figured out vscode terminal to add Laragon's $PATH for...
+        - correct php.ini (php commands)
+        - redis-cli
 - added mailtrap support
+
+2020-11-24:
+- added user switcher
+- added user page
+    - **feels like theres a more elegant way to do all of the things below:**
+    - method for getting all reactables on a user
+        - **how to make this a relationship?**
+    - scope for calculating user score and loading them as a column
+    - method for getting a user's score
+- added voting for posts
+
+- nail down relationships and the ways they can be used and made more robust
+- collections
+- 3rd party integrations
+- image uploads (user avatar)
 
 ### Features
 
@@ -95,7 +109,7 @@ also:
     - **(2)** Authorization
         - where do yo put the gate definitions
         - where does the actual authentication logic live
-        - where do you do the autorization
+        - where do you do the authorization
     - **(2)** Validation
         - displaying validation errors on the page
         - where do you validate

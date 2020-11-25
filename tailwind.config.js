@@ -8,10 +8,10 @@ module.exports = {
     ],
 
     theme: {
+        fontFamily: {
+            sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        },
         extend: {
-            fontFamily: {
-                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
-            },
             maxHeight:{
                 'half': '50vh',
                 '1/4': '25%',

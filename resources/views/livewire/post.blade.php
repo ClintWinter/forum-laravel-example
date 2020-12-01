@@ -2,21 +2,21 @@
     {{-- post + comments + new comment --}}
     <div class="w-full xl:w-2/3 mx-auto">
         {{-- post --}}
-        <div class="px-4 py-2 mb-4">
-            <h1 class="text-xl font-bold leading-tight py-4 mb-8">{{ $post->title }}</h1>
+        <div class="bg-white px-8 py-12 mb-8 rounded-sm shadow">
+            <h1 class="text-xl font-bold leading-tight mb-12">{{ $post->title }}</h1>
 
             <div class="mb-12 flex">
                 {{-- score --}}
                 @if(auth()->check())
                     <div class="w-10 flex flex-col items-center mr-4">
                         <x-btn.link wire:click="upvote">
-                            <i class="fas fa-chevron-up {{ $this->post->isUpvotedBy(auth()->user()) ? 'text-green-500' : 'text-gray-300' }}"></i>
+                            <i class="fas fa-chevron-circle-up {{ $this->post->isUpvotedBy(auth()->user()) ? 'text-green-500' : 'text-gray-300' }}"></i>
                         </x-btn.link>
 
-                        <span>{{ $this->post->score() }}</span>
+                        <span class="text-xl py-2">{{ $this->post->score() }}</span>
 
                         <x-btn.link wire:click="downvote">
-                            <i class="fas fa-chevron-down {{ $this->post->isDownvotedBy(auth()->user()) ? 'text-orange-500' : 'text-gray-300' }}"></i>
+                            <i class="fas fa-chevron-circle-down {{ $this->post->isDownvotedBy(auth()->user()) ? 'text-orange-500' : 'text-gray-300' }}"></i>
                         </x-btn.link>
                     </div>
                 @endif
@@ -25,11 +25,18 @@
             </div>
 
             <div class="flex justify-between">
-                <p class="text-gray-700 text-xs flex items-center space-x-2">
-                    <i class="fas fa-user text-lg"></i>
-                    <a href="{{ $post->user->path() }}" class="font-bold text-gray-900 text-sm mr-1">{{ $post->user->name }}</a>
-                    <span>{{ $post->created_at->diffForHumans() }}</span>
-                </p>
+                <div class="text-gray-700 text-xs flex items-center space-x-2">
+                    <span class="text-xl fa-stack leading-none">
+                        <i class="fas fa-square fa-stack-2x text-gray-100"></i>
+                        <i class="far fa-square fa-stack-2x text-gray-200"></i>
+                        <i class="fas fa-user fa-stack-1x text-gray-400"></i>
+                    </span>
+
+                    <div class="flex flex-col">
+                        <a class="text-gray-700 hover:text-gray-900 text-sm" href="{{ $post->user->path() }}">{{ $post->user->name }}</a>
+                        <span class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</span>
+                    </div>
+                </div>
 
                 @can('update', $post)
                     <div>
@@ -56,13 +63,11 @@
             </div>
         </div>
 
-        <hr class="mt-8 mb-16">
-
         <x-comment.list :comments="$comments" />
 
         {{-- new comment --}}
         @auth
-            <div class="mt-16 bg-gray-100 border border-gray-300 rounded-sm p-4">
+            <div class="mt-16 bg-white rounded-sm shadow">
                 @if($errors->has('body'))
                     <div class="border border-red-600 rounded-sm bg-red-300 text-red-900 p-4 pb-2 mb-4">
                         @foreach ($errors->get('body') as $error)
@@ -80,7 +85,7 @@
                 </div>
             </div>
         @else
-            <div class="bg-gray-100 border border-gray-300 rounded-sm p-4 py-8 mt-16">
+            <div class="bg-white rounded-sm shadow p-4 py-8 mt-16">
                 <p class="text-center mb-2 text-lg">Want to be part of the conversation?</p>
                 <p class="text-center"><x-link class="text-blue-500" href="/login">Log in</x-link> or <x-link class="text-blue-500" href="/register">Sign up!</x-link></p>
             </div>

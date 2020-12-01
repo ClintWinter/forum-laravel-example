@@ -82,51 +82,26 @@ class User extends Authenticatable
 
     public function reactables()
     {
-        return $this->comments()
-            ->select(['id','body as display', 'created_at'])
-            ->withSum('reactions', 'value')
-            ->get()
-            ->concat(
-                $this->posts()
-                ->select(['id','title as display', 'created_at'])
-                ->withSum('reactions', 'value')
-                ->get())
-            ->sortByDesc->created_at;
+        return collect([
+                $this->comments()->withSum('reactions', 'value')->get(),
+                $this->posts()->withSum('reactions', 'value')->get(),
+            ])
+            ->collapse()
+            ->map(function ($reactable) {
+                $display = $reactable instanceof Comment
+                    ? $reactable->body
+                    : $reactable->title;
+
+                return $reactable->setAttribute('display', $display);
+            });
     }
 
     // total score (combined score of all user's comments and posts)
     public function score()
     {
-        $commentScore = DB::query()->fromSub(
-            $this->comments()->withSum('reactions', 'value'), 'comment_scores'
-        )->sum('reactions_sum_value');
-
-        $postScore = DB::query()->fromSub(
-            $this->posts()->withSum('reactions', 'value'), 'post_scores'
-        )->sum('reactions_sum_value');
-
-        return $commentScore + $postScore;
-    }
-
-    public function scopeWithScore($query)
-    {
-        $scores = User::addSelect([
-            'users.id as user_id',
-            'comment_score' => DB::query()
-                ->selectRaw('coalesce(sum(reactions_sum_value),0)')
-                ->fromSub(Comment::withSum('reactions', 'value'), 'comment_scores')
-                ->whereColumn('user_id', 'users.id'),
-
-            'post_score' => DB::query()
-                ->selectRaw('coalesce(sum(reactions_sum_value),0)')
-                ->fromSub(Post::withSum('reactions', 'value'), 'post_scores')
-                ->whereColumn('user_id', 'users.id')
-        ]);
-
-        $query->select('users.*')
-            ->addSelect(DB::raw('(comment_score + post_score) as score'))
-            ->joinSub($scores, 'scores', function ($join) {
-                $join->on('users.id', '=', 'scores.user_id');
-            });
+        return Reaction::whereHas('reactable', function($query) {
+                $query->where('user_id', $this->id);
+            })
+            ->sum('value');
     }
 }

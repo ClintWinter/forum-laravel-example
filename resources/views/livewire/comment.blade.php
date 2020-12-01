@@ -1,34 +1,41 @@
 <div
-    class="p-1 mt-2 {{$comment->trashed() ? 'bg-gray-100' : 'bg-white'}} border border-gray-200"
+    class="p-1 mt-2 {{$comment->trashed() ? 'bg-gray-100' : 'bg-white'}} border border-gray-200 rounded-sm"
     x-data="{ collapsed: false, confirmDelete: false, editing: false }"
     id="Comment{{ $comment->id }}"
 >
     {{-- headline --}}
-    <div class="flex items-center text-xs">
+    <div class="flex items-center text-xs p-4">
         <div class="mr-4">
-            <x-btn.link @click="collapsed = true" x-show="! collapsed">[-]</x-btn.link>
-            <x-btn.link @click="collapsed = false" x-show="collapsed">[+]</x-btn.link>
+            <x-btn.link @click="collapsed = true" x-show="! collapsed">
+                <i class="fas fa-minus text-gray-400"></i>
+            </x-btn.link>
+            <x-btn.link @click="collapsed = false" x-show="collapsed">
+                <i class="fas fa-plus text-gray-400"></i>
+            </x-btn.link>
         </div>
         <p class="text-gray-700 flex items-center space-x-2">
-            <i class="fas fa-user text-lg"></i>
-            <span class="font-bold text-gray-900 text-sm mr-1">{{$comment->user->name}}</span>
-            <span>{{$comment->created_at->diffForHumans()}}</span>
+            <a class="font-bold text-gray-700 hover:text-gray-900 text-sm mr-1" href="{{ $comment->user->path() }}">
+                {{ $comment->user->name }}
+            </a>
+            <span>
+                {{ $comment->created_at->diffForHumans() }}
+            </span>
         </p>
     </div>
 
     {{-- score + body --}}
-    <div class="flex mt-4" x-show="! collapsed">
+    <div class="flex my-4 px-4" x-show="! collapsed">
         {{-- score --}}
         @if(auth()->check() && ! $comment->trashed())
             <div class="w-10 flex flex-col items-center">
                 <x-btn.link wire:click="upvote">
-                    <i class="fas fa-chevron-up {{ $this->comment->isUpvotedBy(auth()->user()) ? 'text-green-500' : 'text-gray-300' }}"></i>
+                    <i class="fas fa-chevron-circle-up {{ $this->comment->isUpvotedBy(auth()->user()) ? 'text-green-500' : 'text-gray-300' }}"></i>
                 </x-btn.link>
 
-                <span>{{ $this->comment->score() }}</span>
+                <span class="text-xl py-2">{{ $this->comment->score() }}</span>
 
                 <x-btn.link wire:click="downvote">
-                    <i class="fas fa-chevron-down {{ $this->comment->isDownvotedBy(auth()->user()) ? 'text-orange-500' : 'text-gray-300' }}"></i>
+                    <i class="fas fa-chevron-circle-down {{ $this->comment->isDownvotedBy(auth()->user()) ? 'text-orange-500' : 'text-gray-300' }}"></i>
                 </x-btn.link>
             </div>
         @endif
@@ -58,7 +65,7 @@
 
     {{-- bottom line --}}
     @if(! $comment->trashed())
-        <div class="pt-4" x-show="! collapsed">
+        <div class="p-4" x-show="! collapsed">
             <div class="flex space-x-2 text-xs text-gray-500">
                 @can('update', $comment)
                     <x-btn.link class="underline" @click="editing = true">Edit</x-btn.link>

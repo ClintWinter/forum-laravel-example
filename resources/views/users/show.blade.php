@@ -3,34 +3,27 @@
 
     <div class="container mx-auto py-12 px-2">
         <div class="mb-12">
-            <h1 class="text-4xl font-bold mb-4">{{ $user->name }}</h1>
-            <p class="text-sm text-gray-600"><span class="text-base font-bold text-black">{{ $user->score() }}</span> Score</p>
-        </div>
+            <h1 class="text-4xl font-bold mb-8">
+                {{ $user->name }}
+            </h1>
 
-        <div class="py-2 border border-gray-300">
-            @foreach($user->reactables() as $reactable)
-                <div class="p-4 mb-4 border-b border-gray-200 last:border-b-0">
-                    <div class="mb-2 flex justify-between items-start">
-                        <p class="text-gray-700">
-                            {{ Str::limit($reactable->display, 50) }}
-                        </p>
-                        <p class="text-xl mr-4 {{ $reactable->reactions_sum_value >= 0 ? 'text-green-500' : 'text-red-700' }}">
-                            {{ $reactable->reactions_sum_value >= 0 ? '+'.($reactable->reactions_sum_value ?: 0) : $reactable->reactions_sum_value }}
-                        </p>
-                    </div>
-
-                    <p class="text-sm text-gray-500">
-                        @if(class_basename($reactable) === 'Comment')
-                            <i class="text-gray-400 fas fa-comment"></i>
-                        @elseif(class_basename($reactable) === 'Post')
-                            <i class="text-gray-400 fas fa-quote-left"></i>
-                        @endif
-
-                        <span class="mr-2">{{ class_basename($reactable) }}</span>
-                        <span class="text-xs">{{ $reactable->created_at->diffForHumans() }}</span>
-                    </p>
+            <div class="flex items-center justify-between bg-white rounded-sm shadow px-8 py-16">
+                <div class="w-1/3 flex flex-col items-center">
+                    <span class="text-3xl font-bold text-black">{{ $user->score() }}</span>
+                    <span class="text-base text-gray-500">Score</span>
                 </div>
-            @endforeach
+                <div class="w-1/3 flex flex-col items-center">
+                    <span class="text-3xl font-bold text-black">{{ $user->posts()->count() }}</span>
+                    <span class="text-base text-gray-500">Posts</span>
+                </div>
+                <div class="w-1/3 flex flex-col items-center">
+                    <span class="text-3xl font-bold text-black">{{ $user->comments()->count() }}</span>
+                    <span class="text-base text-gray-500">Comments</span>
+                </div>
+            </div>
         </div>
+
+        {{-- menu --}}
+        <livewire:user.show :user="$user" />
     </div>
 </x-master>

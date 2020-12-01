@@ -103,7 +103,7 @@ also:
 - **(Yes)** Experienced building API's (Oauth, Http::class, Webhooks)
 - **(Yes)** TailwindCSS, Livewire, Blade
 - **(Some)** TDD Experience
-- Very good understanding of Laravel and it's Concepts/Tools
+- Very good understanding of Laravel and its Concepts/Tools
     - **(2)** Eloquent/Models
         - polymorphic relationship
     - **(2)** Authorization

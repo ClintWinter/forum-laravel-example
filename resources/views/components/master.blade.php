@@ -10,34 +10,43 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
     <livewire:styles>
 
     <title>Forum App</title>
 </head>
-<body class="font-sans">
-    <div class="shadow">
+<body class="font-sans bg-gray-100">
+    <div class="bg-white shadow">
         <div class="container mx-auto flex justify-between items-center p-4">
-            <h1 class="font-black text-lg text-indigo-600"><a href="/posts">ForumApp</a></h1>
+            <h1 class="font-black text-lg text-indigo-800"><a href="/posts">ForumApp</a></h1>
 
-            @error('throttle:actions')
-                <div class="bg-red-100 border border-red-600 rounded text-red-700">{{ $errors->first('throttle:actions') }}</div>
-            @enderror
+            <div class="flex items-center justify-center">
+                <x-link href="/users">Users</x-link>
+            </div>
 
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-8">
                 @auth
                     @if (auth()->user()->notifications()->exists())
                         <livewire:notifications />
                     @endif
-                    <div class="mr-4 text-sm">Active: {{ auth()->user()->name }}</div>
                 @else
                     <x-link-primary type="link" href="/register">Register</x-link-primary>
                 @endauth
 
                 <div x-data="{open:false}" class="relative">
-                    <button class="cursor-pointer" @click="open=true">Switch User <i class="fas fa-chevron-down ml-2"></i></button>
+                    <button class="text-xl cursor-pointer" @click="open=true">
+                        @auth
+                            <span class="text-sm">{{ auth()->user()->name }}</span>
+                        @endauth
+                        <span class="fa-stack">
+                            <i class="fas fa-square fa-stack-2x text-gray-100"></i>
+                            <i class="far fa-square fa-stack-2x text-gray-200"></i>
+                            <i class="fas fa-user fa-stack-1x text-gray-400"></i>
+                        </span>
+                        <span class="text-gray-600"><i class="fas fa-chevron-down"></i></span>
+                    </button>
 
-                    <div class="absolute w-40 py-2 px-4 bg-white shadow rounded right-0 mt-2 border border-gray-200" x-cloak x-show="open" @click.away="open=false">
+                    <div class="absolute w-40 py-2 px-4 bg-white shadow rounded right-0 mt-2 border border-gray-200" x-cloak x-show.transition="open" @click.away="open=false">
                         @foreach ($switchableUsers as $user)
                             <form class="pb-1 border-b border-gray-100 last:border-b-0" method="POST" action="/switch-user">
                                 @csrf

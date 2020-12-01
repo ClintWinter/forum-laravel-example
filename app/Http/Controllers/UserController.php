@@ -18,7 +18,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::withScore()->orderByDesc('score')->get();
+        $users = User::withCount(['posts', 'comments'])->get()
+            ->map(function ($user) {
+                return $user->setAttribute('score', $user->score());
+            })->sortByDesc('score');
 
         return view('users.index', compact('users'));
     }

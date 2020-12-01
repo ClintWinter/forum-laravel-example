@@ -1,28 +1,39 @@
 <x-master>
-    <x-container class="pt-8">
-        <div class="flex justify-between items-center">
+    <div class="pt-8">
+        <x-container class="flex justify-between">
             <x-page-header>Posts</x-page-header>
 
             @auth
                 <x-link-primary href="/posts/new">New post</x-link-primary>
             @endauth
-        </div>
+        </x-container>
+    </div>
 
-        <div class="h-8"></div>
-
-        <div class="flex justify-around flex-wrap items-stretch border border-gray-300">
-            <div class="h-4"></div>
-
+    <x-container class="pt-8">
+        <div class="pt-4 flex justify-around flex-wrap items-stretch bg-white shadow rounded-sm">
             @foreach ($posts as $post)
-                <div class="w-full mx-4 mb-4 pb-4 flex items-center justify-between border-b border-gray-100 last:border-b-0">
+                <div class="w-full px-4 pb-4 mb-4 flex items-center justify-between border-b-2 border-gray-100 last:border-b-0">
                     <div class="flex-grow">
-                        <h2 class="font-bold leading-none mb-2" title="{{ \Str::limit($post->body, 100) }}">
+                        <div class="flex items-start mb-6">
+                            <span class="text-xl fa-stack leading-none">
+                                <i class="fas fa-square fa-stack-2x text-gray-100"></i>
+                                <i class="far fa-square fa-stack-2x text-gray-200"></i>
+                                <i class="fas fa-user fa-stack-1x text-gray-400"></i>
+                            </span>
+
+                            <div class="flex flex-col leading-none">
+                                <p class="text-sm text-gray-700 mb-1">
+                                    <x-link href="{{ $post->user->path() }}" class="mr-2">{{ $post->user->name }}</x-link>
+                                </p>
+                                <p class="text-xs text-gray-400">
+                                    {{ $post->created_at->diffForHumans() }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <h2 class="text-lg font-bold text-gray-800 leading-none" title="{{ \Str::limit($post->body, 100) }}">
                             <x-link href="/posts/{{ $post->id }}">{{ $post->title }}</x-link>
                         </h2>
-
-                        <div class="flex justify-between items-end">
-                            <p class="text-xs text-gray-600"><i class="fas fa-user"></i> <a class="underline" href="/users/{{$post->user->id}}">{{ $post->user->name }}</a> • {{ $post->created_at->diffForHumans() }}</p>
-                        </div>
                     </div>
 
                     <div class="mr-4">
@@ -31,10 +42,16 @@
                         @endif
                     </div>
 
-                    <div class="flex flex-col justify-center items-end space-y-2">
-                        <p class="text-sm text-gray-600">{{$post->comments_count}} <i class="fas fa-comments text-gray-400"></i></p>
+                    <div class="flex flex-col justify-center w-20 space-y-2">
+                        <p class="text-sm text-gray-600">
+                            <i class="fas fa-comments text-gray-400"></i>
+                            {{$post->comments_count}}
+                        </p>
 
-                        <p class="text-sm text-gray-600">{{ $views[$post->id] ?? 0 }} <i class="fas fa-eye text-gray-400"></i></p>
+                        <p class="text-sm text-gray-600">
+                            <i class="fas fa-eye text-gray-400"></i>
+                            {{ $views[$post->id] ?? 0 }}
+                        </p>
                     </div>
                 </div>
             @endforeach

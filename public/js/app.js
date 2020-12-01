@@ -4024,6 +4024,9 @@ window.addEventListener('hashchange', function (event) {
   });
   document.querySelector(window.location.hash).classList.add('bg-yellow-100');
 });
+window.FontAwesomeConfig = {
+  autoReplaceSvg: false
+};
 
 /***/ }),
 
